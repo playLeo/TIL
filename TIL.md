@@ -1,3 +1,8 @@
+---
+layout: single
+title: "합병정렬"
+---
+
 # 합병정렬 / 병합정렬 (Merge Sort)
 ___
 
