@@ -5,7 +5,7 @@ data type
 char <-> varchar  고정 문자열, 가변문자열
 
 char <-> nchar char(10) -> 영문자10개, 한글5개 저장한는 10byte 생성
-, nchar(10) -> 문자10개, 한글 10개 저장한느 20byte 생성
+, nchar(10) -> 문자10개, 한글 10개 저장한는 20byte 생성
 
 
 ## DDL - 데이터 정의어(Data Definition Language)
