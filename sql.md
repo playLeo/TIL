@@ -25,18 +25,18 @@ NOT NULL, CONSTRAINT 조건 추가가능
 ### ALTER TABLE 
 컬럼 추가, 수정(DATA TYPE, DATA SIZE), 삭제 명령어
 
-컬럼 추가
+- 컬럼 추가
 ```roomsql
 ALTER TABLE products
 ADD pdate datetime null -> 초기값주며 컬럼추가
 ```
-컬럼 수정
+- 컬럼 수정
 ```roomsql
 ALTER TABLE products
 ALTER COLUMN price VARCHAR(10) -> 데이터가 있다면 DATA TYPE 수정 불가,
 크기는 같거나 크게 변경가능
 ```
-컬럼 삭제
+- 컬럼 삭제
 ```roomsql
 ALTER TABLE products
 DROP COLUMN price 
