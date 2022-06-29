@@ -1,0 +1,73 @@
+#프로그래머스 비밀지도
+
+하나하나 2진수로 변환하고 2차원 answerMap의 값을 비교하며 정답을 출력했다.
+
+```java
+for (int i = 0; i < n; i++) {
+            transBinary(arr1[i], i);
+            transBinary(arr2[i], i);
+        }
+
+        String[] answer = new String[n];
+        for (int i = 0; i < n; i++) {
+            answer[i] = new String();
+        }
+
+        for (int i = 0; i < n; i++) {
+            for (int j = 0; j < n; j++) {
+                if (answerMap[i][j] == 1)
+                    answer[i] += "#";
+                else {
+                    answer[i] += " ";
+                }
+            }
+        }
+        
+        return answer;
+
+        
+    }
+
+    static void transBinary(int v, int i) {
+        int j = n-1;
+        while (v >= 2) {
+            if(answerMap[i][j] == 1)
+                j--;
+            else{
+                answerMap[i][j--] = v % 2;
+            }
+            v /= 2;
+        }
+        if(answerMap[i][j] != 1)
+            answerMap[i][j] = v;
+        System.out.println(i + " " + j + " " + v);
+
+    }
+```
+
+정수값을 2진수 문자열로 변환하는 Integer.toBinaryString()
+
+비트연산자로 1값만 찾아오기
+
+String.format()으로 2진수 규격 맞춰주기
+
+
+```java
+class Solution {
+  public String[] solution(int n, int[] arr1, int[] arr2) {
+        String[] result = new String[n];
+        for (int i = 0; i < n; i++) {
+            result[i] = Integer.toBinaryString(arr1[i] | arr2[i]);
+        }
+
+        for (int i = 0; i < n; i++) {
+            result[i] = String.format("%" + n + "s", result[i]);
+            result[i] = result[i].replaceAll("1", "#");
+            result[i] = result[i].replaceAll("0", " ");
+        }
+
+        return result;
+    }
+}
+
+```
