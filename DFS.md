@@ -307,11 +307,14 @@ public class Main {
             System.out.println("s 값 : " + s);
             if (!visited[i]) {
                 visited[i] = true;
-                s += members[i];
-                dfs(s);
+                    //call by value 이기 때문에 s 값을 변경해서 parameter로 보냈지만, 그사이에 s값이 변경됐다.
+                s += members[i]; // ns = s + member[i];
+                dfs(s);          // dfs(ns);
                 visited[i] = false;
             }
         }
     }
 }
 ```
+                    
+               
