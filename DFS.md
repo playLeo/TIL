@@ -177,7 +177,7 @@ class Solution {
 
 
 <details>
-<summary좌표순회</summary>
+<summary>좌표순회</summary>
 <div mardown="1">
 
 [백준 2267](https://www.acmicpc.net/problem/2267)
