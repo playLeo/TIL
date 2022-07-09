@@ -1,8 +1,8 @@
 # DFS
 
-* 그래프 순회
+
 <details>
-<summary>백준 24480</summary>
+<summary>그래프 순회</summary>
 <div mardown="1">
 
 [백준 24480](https://www.acmicpc.net/problem/24480)
@@ -100,9 +100,8 @@ public class Main {
 </div>
 </details>
 
-* 조합 모두 탐색
 <details>
-<summary>프로그래머스 단체사진</summary>
+<summary>조합 모두 탐색</summary>
 <div mardown="1">
 
 [프로그래머스 단체사진    ](https://school.programmers.co.kr/learn/courses/30/lessons/1835)
@@ -176,9 +175,9 @@ class Solution {
 </div>
 </details>
 
-* 좌표순회
+
 <details>
-<summary>백준 2667</summary>
+<summary좌표순회</summary>
 <div mardown="1">
 
 [백준 2267](https://www.acmicpc.net/problem/2267)
