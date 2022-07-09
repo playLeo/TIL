@@ -106,6 +106,69 @@ public class Main {
 <div mardown="1">
 
 [프로그래머스 단체사진    ](https://school.programmers.co.kr/learn/courses/30/lessons/1835)
+    
+```java
+class Solution {
+    
+    String[] members = {"A", "C", "F", "J", "M", "N", "R", "T"};
+    boolean[] visited = new boolean[members.length];
+    int answer = 0;
+    
+    
+    public int solution(int n, String[] data) {
+        
+        dfs("" , data);
+
+        return answer;
+    }
+    
+    void dfs(String s, String[] data) {
+        if (s.length() == 8) {
+            if(isCorrect(s, data)) {
+                answer++;
+            }
+            return;
+        }
+        for (int i = 0; i < members.length; i++) {
+            if(!visited[i]) {
+                String ns = s + members[i];
+                visited[i] = true;
+                dfs(ns, data);
+                visited[i] = false;
+            }
+        }
+    }
+
+    boolean isCorrect(String s, String[] datas) {
+        for (String data : datas) {
+            //int a = s.indexOf(data.charAt(0));
+            //int b = s.indexOf(data.charAt(2));
+            int sub = Math.abs(s.indexOf(data.charAt(0)) - s.indexOf(data.charAt(2))) - 1;
+            char op = data.charAt(3);
+            int v = data.charAt(4) - '0';
+
+            switch (op) {
+                case '=':
+                    if (sub != v) {
+                        return false;
+                    }
+                    break;
+                case '>':
+                    if (sub <= v) {
+                        return false;
+                    }
+                    break;
+                case '<':
+                    if (sub >= v){
+                        return false;
+                    }
+                    break;
+            }
+        }
+        return true;
+    }
+} 
+```
 
 
 
@@ -212,3 +275,43 @@ public class Main {
 * [카카오 컬러링북](https://school.programmers.co.kr/learn/courses/30/lessons/1829)
 </div>
 </details>
+                    
+                    
+```java
+package practice;
+
+import java.util.*;
+
+
+public class Main {
+
+
+    static String[] members = {"A", "B"};
+    static boolean[] visited = new boolean[members.length];
+    static int answer = 0;
+
+    public static void main(String[] args) {
+
+        dfs("");
+
+    }
+
+    static void dfs(String s) {
+        System.out.println("dfs에서 바로 받은 s값 : " + s);
+        if(s.length() == members.length) {
+            System.out.println("return s : " + s);
+            return;
+        }
+        for (int i = 0; i < members.length; i++) {
+            System.out.println("i값 : " + i);
+            System.out.println("s 값 : " + s);
+            if (!visited[i]) {
+                visited[i] = true;
+                s += members[i];
+                dfs(s);
+                visited[i] = false;
+            }
+        }
+    }
+}
+```
