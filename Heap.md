@@ -100,4 +100,10 @@ public class Main {
 3. 원소 삭제시 root 노드 삭제후 마지막 노드 root로 올리고 heapify
 4. 부모와 자식노드 교환시 자식노드로 교환된 노드 heap성질 만족 여부 확인후 heapify 진행
 
-
+! 완전이진트리기 때문에 O(log N)
+! Heap 구현시 index는 '1'부터 시작해야 편하다.
+! default는 최소힙
+! peek하면 pop되는 값이나온다. -> index 1값
+! Max Heap 구현시 new PriorityQueue<>(Comparator.reverseOrder()) 
+! PriorityQueue는 추상자료형 / Heap 은 자료구죠
+q.isEmpty 가 true 인 상황에서 poll()해도 Exception 발생안하고 null이 반환된다.
