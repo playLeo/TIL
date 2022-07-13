@@ -1,0 +1,85 @@
+# 카카오 메뉴 리뉴얼
+
+```java
+
+import java.util.*;
+
+class Solution {
+    Map<String, Integer> map = new HashMap<>();
+    List<String> answerList = new ArrayList<>();
+    
+    public String[] solution(String[] orders, int[] course) {
+    
+         String temp = "";
+
+        for (int i = 0; i < orders.length; i++) {
+            char[] chars = orders[i].toCharArray();
+            Arrays.sort(chars);
+            orders[i] = String.valueOf(chars);
+        }
+
+        for(int n : course) {
+            for (String order : orders)
+                find(order, 0, n, temp);
+            //map에 있는 value 값중 최대값을 찾아 가져오기(중복포함)
+            List<Integer> integerList = new ArrayList<>(map.values());
+            int max = Collections.max(integerList);
+
+            if (max > 1) {
+                for (String key : map.keySet()) {
+                    if(map.get(key) == max)
+                        answerList.add(key);
+                }
+            }
+            map.clear();
+        }
+        Collections.sort(answerList);
+
+        String[] answer = new String[answerList.size()];
+
+        for(int i = 0; i< answer.length; i++){
+            answer[i] = answerList.get(i);
+        }
+        return answer;
+    }
+    
+    void find(String s, int index, int n, String temp) {
+        if(s.length() < n)
+            return;
+        if(temp.length() == n) {
+            if (map.containsKey(temp))
+                map.put(temp, map.get(temp) + 1);
+            else
+                map.put(temp, 1);
+        }
+        else {
+            for (int i = index; i < s.length(); i++) {
+                String n_temp = temp + s.charAt(i);
+                find(s, i+1, n, n_temp);
+            }
+        }
+    }
+}
+```
+
+map<String, Integer>로 저장된 맵에서 Integer 값이 가장 큰 String을 찾는(중복 포함) 작업에서 시간을 썼다.
+
+> List<Integer> integerList = new ArrayList<>(map.values());
+> int max = Collections.max(integerList);
+> 
+> 를 통해 max값을 찾고
+> 
+> for (String key : map.keySet()) {
+> if(map.get(key) == max)
+> answerList.add(key);
+> key를 순회하며 value를 찾고 key를 찾는 작업을 진행한다.
+> 
+> 
+
+* Map.getOrDefault 메소드
+```java
+java.util.Map
+
+public V getOrDefault(Object Key, V defaultValue)
+-> 찾고자 하는 key 값이 map 에 있으면 해당 key 값의 value를 리턴하고, 없으면 defaultValue를 리턴한다.
+```
