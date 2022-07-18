@@ -2,7 +2,7 @@
 
 
 <details>
-<summary>그래프 순회</summary>
+<summary>그래프(트리) 순회</summary>
 <div mardown="1">
 
 [백준 24480](https://www.acmicpc.net/problem/24480)
@@ -97,6 +97,17 @@ public class Main {
 }
 
 ```
+</div>
+</details>
+
+<details>
+<summary>그래프를 구현하는 방법</summary>
+<div mardown="1">
+* 그래프 구현은 인접행렬과 인접리스트 방식.
+    
+> 인접행렬 -> 조회 O(1), 구현 쉬움 / 정보대입 O(n^2), 2차원배열 공간필요
+    
+> 인접리스트 -> 탑색 O(n), 공간낭비 적다 / 두 정점 연결확인 오래걸림
 </div>
 </details>
 
