@@ -1,0 +1,79 @@
+# [백준 2263](https://www.acmicpc.net/problem/2263)
+
+### 문제요약
+ n 개의 정점을 가진 이진트리의 inorder, postorder 정보가 주어졌을 때, preorder값 구하기 
+
+
+### 풀이방법
+1. postorder에서는 root 노드, inorder에서는 root 노드 기준 left, right를 찾는다.
+> get_gre(il, in_index - 1, pl, pl + in_index - il - 1);
+> 
+> get_gre(in_index + 1, ir, pl + in_index  - il, pr - 1);
+> 
+> partition 하는 과정에서 단순하게 pl - il 의 차를 고려하지 않고 나눴더니 일부 테스트 케이스만 만족했다.
+> 
+> postorder의 마지막 인덱스의 값을 가진 inorder의 index인 in_index를 찾고, 
+
+```java
+package practice;
+
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.util.*;
+
+public class Main {
+
+    static StringBuilder sb;
+    static int[] in;
+    static int[] post;
+
+    public static void main(String[] args) throws IOException{
+
+        BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
+        StringTokenizer st;
+        sb = new StringBuilder();
+
+        int n = Integer.parseInt(br.readLine());
+
+        in = new int[n];
+        post = new int[n];
+
+        st = new StringTokenizer(br.readLine());
+
+        for(int i =0; i < n; i++)
+            in[i] = Integer.parseInt(st.nextToken());
+
+        st = new StringTokenizer(br.readLine());
+
+        for(int i =0; i < n; i++)
+            post[i] = Integer.parseInt(st.nextToken());
+
+        get_gre(0, n-1, 0 , n-1);
+
+        System.out.print(sb);
+    }
+
+    // inorder 참조할 시작, 끝 인덱스 il,ir
+    // postorder 참조할 시작, 끝 인덱스 pl, pr
+    static void get_gre(int il, int ir, int pl, int pr) {
+
+        if (il <= ir && pl <= pr) {
+            sb.append(post[pr] + " " );
+
+            int in_index = 0;
+
+            for (int i = il; i <= ir; i++)
+                if (in[i] == post[pr]) {
+                    in_index = i;
+                    break;
+                }
+
+//            get_gre(il, in_index - 1, il, in_index - 1);
+//            get_gre(in_index + 1, ir, pl, pr - 1);
+            get_gre(il, in_index - 1, pl, pl + in_index - il - 1);
+            get_gre(in_index + 1, ir, pl + in_index  - il, pr - 1);
+        }
+    }
+}
+```
