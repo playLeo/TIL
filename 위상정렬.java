@@ -1,0 +1,95 @@
+# 위상 정렬(Topological Sorting)
+
+완수해야 할 여러 가지 일이 있고, 이들간에 상호 선후관계가 있다면 위상정렬을 사용한다.
+
+위상정렬을 하려면 싸이클이 없는 유항그래프를 만족해야한다.
+___
+### 위상 정렬 알고리즘 1
+
+1. 진입 간선이 없는 정점 선택(여러개인 경우 임의로 선택)
+2. 선택된 정점과 진출 간선 제거
+3. 1,2 반복
+
+인접리스트를 활용하여 구현한다.
+
+진입 간선이 없는 정점을 찾기 위해서 모든 정점의 진출 간선 리스트를 보아야한다.
+최악의 경우 하나를 찾는데 O(V+E) 의 시간이 소요된다.
+
+이를 해결하기 위해 알고리즘을 시작할 때 배열을 선언하고 각 정점의 진입 간선 수를 기록하면 모든 과정의 시간을 O(V+E)를 보장할 수 있다.
+
+### 위상 정렬 알고리즘 2
+DFS를 이용(연결리스트) / 연결리스트에 역순으로 순서가 저장되어진다.
+
+연결리스트에 포함된 정점들을 완료된 정점이라 해보자.
+
+1. 완료되지 않은 임의의 정점 선택
+2. 선택된 정점에서 완료되지 않은 정점으로 진출 간선 이동(반복)
+3. 도착한 정점에서 더이상 완료되지 않은 정점으로의 진출 간선이 없다면 완료된 정점으로 포함시키고 백트래킹
+
+<details>
+<summary>DFS를 활용한 위상 정렬</summary>
+<div mardown="1">
+
+[백준 2252](https://www.acmicpc.net/problem/2252)
+```java
+package practice;
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.util.*;
+
+public class Main {
+
+    static List<Integer> [] lists;
+    static boolean[] visitied;
+    static List<Integer> ll = new LinkedList<>();
+
+    public static void main(String[] args) throws IOException {
+
+        BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
+        StringTokenizer st = new StringTokenizer(br.readLine());
+
+        int n = Integer.parseInt(st.nextToken()); // 학생수 n
+        int m = Integer.parseInt(st.nextToken()); // 비교회수 m
+
+        lists = new ArrayList[n + 1];
+        visitied = new boolean[n + 1];
+
+        for(int i =1; i< lists.length; i++)
+            lists[i] = new ArrayList<>();
+
+        while (m-- > 0) {
+            st = new StringTokenizer(br.readLine());
+
+            lists[Integer.parseInt(st.nextToken())].add(Integer.parseInt(st.nextToken()));
+        }
+
+        for (int i = 1; i < lists.length; i++) {
+            if(!visitied[i])
+                dfs(i);
+        }
+
+        StringBuilder sb = new StringBuilder();
+
+        for(int i = ll.size()-1; i >=0; i--)
+            sb.append(ll.get(i) + " ");
+
+    }
+
+    static void dfs(int i) {
+
+        visitied[i] = true;
+
+        if (!lists[i].isEmpty())
+            for(int v : lists[i])
+                if(!visitied[v])
+                    dfs(v);
+
+        ll.add(i);
+    }
+}
+
+```
+
+</div>
+</details>
