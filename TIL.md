@@ -1,0 +1,154 @@
+# 스프링 이해 
+
+## 목차
+[1. 스프링이란?](#1.-스프링이란?)
+[2. 좋은 객체 지향 프로그래밍이란?](#2.-좋은-객체-지향-프로그래밍이란?)
+[1. Ioc, DI, 컨테이너](#3.-IoC,-DI,-컨테이너)
+
+
+## 1. 스프링이란?
+
+스프링 구성 요소
+* 스프링 프레임워크, 스프링 부트, 스프링 데이터, 스프링 세션, 스프링 시큐리티, 스프링 Rest Docs, 스프링 배치, 스프링 클라우드
+
+스프링 프레임워크
+* 핵심기술 : 스프링 DI 컨테이너, AOP, 이벤트, 기타
+* 웹 기술 : 스프링 MVC, 스프링 WebFlux
+* 데이터 접근 기술 : 트랜잭션, JDBC, ORM 지원, XML 지원
+* 기술 통합 : 캐시, 이메일, 원격 접근, 스케줄링
+* 테스트 : 스프링 기반 테스트 지원
+* 언어 : 코틀린, 그루비
+
+스프링 부트
+* 단독으로 실행할 수 있는 스프링 애플리케이션을 쉽게 설정
+* Tomcat 같은 웹 서버를 내장해서 별도의 웹서버를 설치하지 않아도 된다.
+* 손쉬운 빌드 구성을 위한 starter 종속성 제공
+* 스프링과 3rd parthy 라이브러리 자동 구성
+* 메트링, 상태확인, 외부 구성 같은 프로덕션 준비 기능 제공
+* 관례에 의한 간결한 설정
+
+핵심
+* 좋은 객체 지향 애플리케이션을 개발할 수 있게 도와주는 프레임워크
+___
+
+## 2. 좋은 객체 지향 프로그래밍이란?
+
+### 역할과 구현을 분리(다형성 활용)
+
+장점
+1. 클라이언트는 대상의 역할(인터페이스)만 알면 된다.
+2. 클라이언트는 구현 대상의 내부 구조를 몰라도 된다.
+3. 클라이언트는 구현 대상의 내부 구조가 변경되어도 영향을 받지 않느다.
+4. 클라이언트는 구현 대상 자체를 변경해도 영향을 받지 않는다.
+
+한계
+1. 역할(인터페이스) 자체가 변하면, 클라이언트, 서버 모두에게 큰 변경이 발생한다.
+
+### 5가지 원칙(SOLID)
+1. SRP(Single responsibility principle) 단일 책임 원칙  - 한 클래스는 하나의 책임만 가진다 -> 변경이 있을 때, 파급혀과가 적으면 단일 책임 원칙을 잘 따른 것.
+2. OCP(Open/closed principle) 개방-폐쇄 원칙 - 확장은 열려있으나 변경에는 닫혀 있어야 한다. -> 다형성을 활용
+3. LSP(Liskov substitution principle) 리스코프 치환 원칙 - 프로그램의 객체는 프로그램의 정확성을 깨뜨리지 않으면서 하위 타입의 인스턴스로 바꿀 수 있어야 한다.
+4. ISP(Interface segregation principle) 인터페이스 분리 원칙 - 특정 클라이언트를 위한 인터페이스 여러 개가 범용 인터페이스 하나보다 낫다.
+5. DIP(Dependency inversion principle) 의존관계 역전 원칙 - 프로그래머는 구체화에 의존하지 않고 추상화에 의존해야한다.
+
+요약
+1. SRP - 한 기능 한 클래스
+2. OCP - 다형성의 확정성, 변경성
+3. LSP - 하위클래스를 인터페이스에 맞게
+4. ISP - 인터페이스 쪼개기
+5. DIP - 하위클래스보다 인터페이스로 사용
+
+다형성으로만 OCP, DIP를 지킬 수 없다.
+-> 인터페이스 레퍼런스를 생성해도 new 로 할당할 때, 하위클래스로 할당해야 하기 때문에 변경에는 닫혀있지 못하는 OCP 위반과, 하위클래스에 의존하는 DIP 위반.
+
+![BeanFactory계층구조](https://velog.velcdn.com/images/justin403502/post/90b8dab5-0841-4ae5-ab81-1426a81e3b6b/image.png)
+
+* BeanFactory - 객체 생성, 객체 검색 기능(getBean()), 싱글톤, 프로토타입 빈 확인 기능
+* AnnotationConfigApplicationContext - 메세지, 프로필/환경 변수 처리 기능 추가
+
+스프링 빈을 관리하는 스프링 컨테이너
+* AnnotationConfigApplicationContext - 자바 애노테이션을 이용하여 클래스로부터 객체 설정 정보를 가져온다.
+* GenericXmlApplicationContext - XML로부터 객체 설정 정보를 가져온다.
+* GenericGroovyApplicationContext - 그루비 코드를 이용해 설정 정보를 가져온다.
+
+java 코드를 사용한 Bean 설정파일 AppConfig이다.
+```java
+package spring.core;
+
+import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.Configuration;
+import spring.core.discount.DiscountPolicy;
+import spring.core.discount.FixDiscountPolicy;
+import spring.core.member.MemberRepository;
+import spring.core.member.MemberService;
+import spring.core.member.MemberServiceImpl;
+import spring.core.member.MemoryMemberRepository;
+import spring.core.order.OrderService;
+import spring.core.order.OrderServiceImpl;
+
+@Configuration
+public class AppConfig {
+
+    @Bean
+    public MemberService memberService() {
+        return new MemberServiceImpl(MemberRepository());
+    }
+
+    @Bean
+    public OrderService orderService() {
+        return new OrderServiceImpl(MemberRepository(), DiscountPolicy());
+    }
+
+    @Bean
+    public DiscountPolicy DiscountPolicy() {
+        return new FixDiscountPolicy();
+    }
+
+    @Bean
+    public MemberRepository MemberRepository() {
+        return new MemoryMemberRepository();
+    }
+}
+```
+MemmoryMemberRepository가 3번 객체생성되는 자바코드가 실행되지만, 동일한 객체 반환이 보장된다.
+
+@Bean 을 사용하여 Bean객체 생성을 선언하고, @Configuration을 통해 바이트조작 라이브러리(CGLIB)를 사용하여 Bean 생성하고, 이미 존재한는 Bean인 경우, 기존 객체를 리턴하며 singleton을 유지한다.
+
+> CGLIB 확인해 보기
+> 
+> System.out.println(ac.getBean(AppConfig.class).getClass()); 을 실행했을 때,
+>  
+> @Configuration 제거 -> class spring.core.AppConfig
+> 
+> @Configuration 설정 -> class spring.core.AppConfig$$EnhancerBySpringCGLIB$$11083357
+
+CGLIB를 통해 생성된 Bean은 AppConfig를 상속받아 생성되었기 때문에, getBean(AppConfig.class)로 조회가 가능하다
+
+@Configuration 없이 Bean을 등록하고 사용한다면 스프링 컨테이너가 관리하는 스프링빈을 사용한다고 할 수 없다.
+
+## 3. IoC, DI, 컨테이너
+
+### 제어의 역전 IOC(Inversion of Control)
+* 인스턴스 생성부터 소멸까지의 인스턴스 생명주기 관리를 개발자가 아닌 컨테이너가 대신 하는 방식.
+
+### 의존관계 주입 DI(Dependency Injection)
+* 의존하는 객체를 직접 생성하는 대신 의존 객체를 전달받는 방식.
+1. 생성자 주입
+2. setter 주입
+3. 필드 주입
+
+### IoC 컨테이너, DI 컨테이너
+* 객체 생성을 관리하고 의존관계를 연결 시켜 주는 것.
+* BeanFactory, ApplicationContext
+
+# 스프링 컨테이너와 스프링빈
+* ApplicationContext 는 인터페이스이고, 스프링 컨테이너다.
+
+헷갈린 부분
+1. AppConfig or AppContext 로 수동 Bean 등록시 @Bean만으로 스프링이 관리하는 객체인 Bean으로 생성되나? new AnnotationConfigApplicationContext(AppConfig.class)로 객체를 생성할 때, Bean 이 생성되나 ?
+2. AppConfig를 new 해서 Bean등록 안하고 직접 사용하는 것과 Bean등록하여 스프링이 관리하는 객체로 사용하는 것의 차이점은 ?
+3. getBean으로 Bean 가져올 때와, 생성자 주입으로 받을 때는 어떤차이? 어떤때 어떤거 쓰는거지 ?
+4. 
+
+___
+1. AnnotationConfigApplicationContext 로 객체 생성할 때, Bean 등록된다?
