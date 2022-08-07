@@ -91,7 +91,7 @@ ex) domain=example.org를 지정했다면, example.org + dev.example.org같은 �
   * XSRF 공격 방지
   * 요청 도메인과 쿠키에 설정된 도메인이 같은 경우만 쿠키 전송
 
-## 캐시와 조건부 요청
+### 캐시와 조건부 요청
 
 
 ![cache img](https://velog.velcdn.com/images%2Fleemember%2Fpost%2F2e619ff2-e755-4205-a4ef-7ad44134e276%2F%EC%A0%9C%EB%AA%A9%20%EC%97%86%EC%9D%8C-1.jpg)
@@ -101,7 +101,7 @@ ex) domain=example.org를 지정했다면, example.org + dev.example.org같은 �
 
 **검증 헤더 추가** 를 통해 조건부 요청(시간을 간단하게 표기했지면 utc 표준으로 사용해야 한다.)
 
-### Last-Modified
+#### Last-Modified
 
 캐시에 값이 없을때 검증 헤더를 포함한 데이터를 받는다.
 
@@ -121,11 +121,11 @@ ex) domain=example.org를 지정했다면, example.org + dev.example.org같은 �
 * 데이터를 수정해서 날짜가 다르지만, 결과가 똑같은 경우, 갱신은 없지만 다운로드 해야한다.
 * 서버에서 별도의 캐시 로직을 관리하고 싶은 경우(주석변경은 캐시 유지 등)
 
-### ETag(Entitiy Tag)
+#### ETag(Entitiy Tag)
 캐시용 데이터에 임의의 고유한 버전 이름을 달아둔다.
 
 
-## 캐시와 조건부 요청 헤더
+### 캐시와 조건부 요청 헤더
 * Cache-Control: max-age
  * 캐시 유호 시간, 초 단위
 * Cache-Control: no-cache
@@ -135,3 +135,9 @@ ex) domain=example.org를 지정했다면, example.org + dev.example.org같은 �
 
 * Pragma(캐시 제어)
 * Expires(캐시 만료일 지정)
+
+
+### 캐시 무효화
+* Cache-Control: no-cache, no-store, must-revalidate(캐시만료시 최초 조회시 원서버에 검증)
+* Pragma: no-cache
+
