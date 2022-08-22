@@ -19,4 +19,11 @@
 
 # @Transactional 어노테이션
 클래스나 메서드에 붙여줄 경우, 해당 범위 내 메서드가 트랜잭션이 되도록 보장해준다.
+
 spring이 메서드에 대한 프록시를 만들기 때문에 CGLIB가 아닌 AOP방식의 프록시 패턴이 적용되는건가?
+
+Test에서의 @Transactional은 자동 롤백 -> org.springframework.test.context.transaction.TestTransaction 은  @Transactional 이 적용된 테스트 메서드를 감싸고 있는 트랜잭션과 상호 작용할 수 있는 기능을 가지는 유틸리티 클래스
+
+! id는 롤백되지 않는다. Auto Increment는 트랜잭션 범위 밖에서 동작
+
+-> 동시성 때문에 트랜잭션 성공 여부 기다리기 힘들기 때문에 바로 부여한다는데 ?
