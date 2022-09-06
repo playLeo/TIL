@@ -5,7 +5,7 @@ api를 테스트 하기위해 Postman을 설치해야 하는 불편함이 있다
 ## build.gradle에 swagger 라이브러리 추가
 
 ```java
-implementation 'io.springfox:springfox-swagger2:2.9.2
+implementation 'io.springfox:springfox-swagger2:2.9.2'
 implementation 'io.springfox:springfox-swagger-ui:2.9.2'
 ```
 
