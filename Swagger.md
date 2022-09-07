@@ -44,6 +44,13 @@ public class SwaggerConfig {
 }
 ```
 
+@EnableSagger2 - Swagger를 설정할 수 있게 활성화 시켜주는 어노테이션
+
+Docket 빈을 정의 후, select() 메소드는 ApiSelectorBuilder 인스턴스 리턴하는데 이는 스웨거에 의해 노출되는 끝단 endpoint을 제어하는 하나의 방법을 제공해준다.
+
+RequestHandlers의 selection을 위한 서술부는 RequestHandlerSelectors와 Pathselectors의 도움을 받아 설정할 수 있다. 둘 다 any()를 쓰면 사용자의 전체 API가 스웨거를 통해 문서화 되어질 것이다.
+
+
 ## Controller 수정
 
 @Api(tags = {"1.User"})
@@ -58,5 +65,7 @@ controller를 대표하는 최상단 타이틀 영역에 표시될 값을 세팅
 ## Entity 수정
 
 
+## 스프링 부트 없이 설정하기
+스프링 부트를 사용하지 않는다면 사용자는 리소스 핸들러의 자동설정 혜택을 받을 수 없다. 스웨거 UI는 리소스의 세트를 추가하는 데 이를 사용자가 @EnableWebMvc어노테이션을 가지는, WebMvcConfigurerAdpter를 확장한 하나의 클래스와 일부로서 설정해주어야 한다.
 
 
