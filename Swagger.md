@@ -69,3 +69,5 @@ controller를 대표하는 최상단 타이틀 영역에 표시될 값을 세팅
 스프링 부트를 사용하지 않는다면 사용자는 리소스 핸들러의 자동설정 혜택을 받을 수 없다. 스웨거 UI는 리소스의 세트를 추가하는 데 이를 사용자가 @EnableWebMvc어노테이션을 가지는, WebMvcConfigurerAdpter를 확장한 하나의 클래스와 일부로서 설정해주어야 한다.
 
 
+!참조
+https://springboot.tistory.com/tag/Swagger
