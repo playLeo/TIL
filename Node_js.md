@@ -21,3 +21,5 @@ Node.js는 확장성이 있는 네트워크 어플리케이션 개발에 사용�
 js로는 웹에 갇혀있음 -> js이용해서 웹페이지 자동 생성하는 web application 생성
 
 https://hanamon.kr/nodejs-%EA%B0%9C%EB%85%90-%EC%9D%B4%ED%95%B4%ED%95%98%EA%B8%B0/
+
+nginx , TCP/UDP , node.js, vue.js 학습
