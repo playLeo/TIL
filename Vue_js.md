@@ -14,7 +14,7 @@ SPA(Single Page Application)
 * 빠른 페이지 변환
 * 적은 트패픽 양
 
-Q. SPA AJAX와 같은 기술이 적용된건가? AJAX는 필요 없는건가 ???
+Q. SPA를 구축할 수 있게 해주는걸 어떻게 해주지? AJAX를 이용하는 건가?
 
 
 ![MVVM 패턴](https://img1.daumcdn.net/thumb/R1280x0/?scode=mtistory2&fname=https%3A%2F%2Fk.kakaocdn.net%2Fdn%2FcVeP4L%2FbtrvZIubnnT%2FCZKbN7k7uHkvIssYIAgjWk%2Fimg.png)
