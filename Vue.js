@@ -1,2 +1,0 @@
-SPA(Single Page Application)
-
