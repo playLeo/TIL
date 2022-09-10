@@ -108,7 +108,20 @@ module.exports = {
 
 Prompt에서 vue-frontend로 이동후 npm run build 실행하면 src.main.resources.static 에 js 패키지가 생성된다.
 
+
+localhost:8080으로 접속하면 프로젝트에 build된 파일들이 나타나는 거라 실시간으로 수정되는 소스를 매번 빌드, 확인하면서 개발할 수가 없기에 명령어 프롬프트로
+
 ### 프로젝트 동작 원리
 * Vue 프로젝트 개발 후 Build -> SpringBoot(static 폴더에 생성)
 * SpringBoot 실행
 * 웹 페이지 접속(경로지정) -> SpringBoot 프로젝트 내의 static 폴데어 생긴 Vue 결과물 실행
+
+
+___
+
+### Vue.js 디렉토리 구조
+1. main.js - vue 인스턴스를 생성하고 그안에 router, store 그리고 랜더링 할 vue를 설정한다. 새로운 라이브러리를 설정할 때 해당 파일에 연겨래서 사용한다.
+2. App.vue & router/index.js 파일
+3. views/Home.vue & views/About.vue 파일 - views 폴더는 사용자가 보이는 뷰들을 관리하는 폴더
+4. asset - public 한 이미지나 파일들을 저장
+
