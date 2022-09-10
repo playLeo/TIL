@@ -41,8 +41,12 @@ Q. SPA를 구축할 수 있게 해주는걸 어떻게 해주지? AJAX를 이용�
 
 
 
+프론트 프레임워크(vue.js, react.js)를 사용할 때에는 백엔드 구성을 Node.js를 사용한다.
+하지만, SpringBoot로 백엔드를 구성하여 사용해보자.
 
 ## Spring & Vue.js 연동
+
+기본적으로 java, npm, vue 가 설치되어 있어야 한다.
 
 node.js 설치후 npm으로 vue cli설치
 
@@ -71,9 +75,11 @@ Node.js로 만들어진 모듈을 웹에서 받아서 설치하고 관리해주�
 
 intellij 프로젝트 안에서 npm 명령어를 powerShell, Command Prompt로 해봐도 안되서 cmd 창으로 설치하고 node -v 와
 npm -v로 설치를 확인했다.
+
 * npm install -g @vue/cli
 
 프로젝트에서 Prompt 창에서
+
 * vue create vue-frontend 실행후 V2 버전으로 설치했다.
 
 프로젝트 바로 하위에 vue-frontend 패키지가 성성된다.
@@ -100,7 +106,9 @@ module.exports = {
 
 ```
 
-Prompt에서 vue-frontend로 이동후
-npm run build 실행하면 src.main.resources.static 에 js 패키지가 생성된다.
+Prompt에서 vue-frontend로 이동후 npm run build 실행하면 src.main.resources.static 에 js 패키지가 생성된다.
 
-
+### 프로젝트 동작 원리
+* Vue 프로젝트 개발 후 Build -> SpringBoot(static 폴더에 생성)
+* SpringBoot 실행
+* 웹 페이지 접속(경로지정) -> SpringBoot 프로젝트 내의 static 폴데어 생긴 Vue 결과물 실행
