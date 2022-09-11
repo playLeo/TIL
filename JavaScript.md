@@ -1,10 +1,17 @@
-script 태그
+## JavaScript란 ?
 
-document.write() - 동적으로 작동 html 태크 안에 event
+JavaScript는 웹페이지에서 복잡한 기능을 구현할 수 있도록 하는 스크립팅 언어이다.
 
-document.querySelectorAll()
+DOM API를 통해 HTML과 CSS를 동적으로 수정, 사용자 인터페이스를 업데이트하는 일에 가장 많이 사용된다.
 
-### SS 특징 ':' , ';', '{}'
+주기적으로 갱신되거나, 사용자와 상호작용이 가능하거나, 애니메이션이 적용된 2D/3D 그래픽을 볼 수 있다면 JavaScript가 관여하고 있을거라고 생각해도 좋다.
+
+script 태그를 사용해 사용한다.
+
+* document.write() 
+* document.querySelectorAll()
+
+### CSS 특징 ':' , ';', '{}'
 '.' -> class; '#' -> id; 그냥쓰면 태그
 
 document.querySelector('body').style.color = 'black'; -> css의 selector로 타겟 지정 
