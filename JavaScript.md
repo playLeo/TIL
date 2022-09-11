@@ -154,10 +154,41 @@ console.log( 'The area of a circle of radius 4 is '
            + circle.area(4));
 ```
 
+### 정규표현식 - 문자열에서 특정한 문자를 찾아내는 도구
 
+정규표현식은 두가지 단계로 이루어진다. 하나는 컴파일 다른 하나는 실행이다.
 
+1. 컴파일 - 검출하고자 하는 패턴을 만드는 일
 
+```javascript
+// 정규표현식 리터럴
+var pattern = /a/;
+// /a/i -> 대소문자 구분 X
+// /a/g -> 검색된 모든결과 리턴
 
+// 정규표현식 객체 생성자
+var pattern = new RegExp('a');
+
+// 2. 실행
+// exec(), test()
+pattern.exec('abcd'); //['a']
+pattern.exec('bcde'); // null
+pattern.test('abcd') // true
+pattern.test('bcde') // false
+
+'abcdef'.match(pattern); // ['a']
+'bcdefg'.match(pattern); // null
+
+'abcdef'.replace(pattern, 'A'); // ['Abcdef']
+```
+
+#### 캡쳐
+```javascript
+var pattern = /(\w+)\s(\w+)/;
+var str = "coding everybody";
+var result = str.replace(pattern, "$2, $1"); // 괄호안의 패턴은 변수처럼 사용할 수 있다.
+console.log(result); // everybody, coding
+```
 
 
 script 태그를 사용해 사용한다.
@@ -166,6 +197,20 @@ script 태그를 사용해 사용한다.
 * document.querySelectorAll()
 
 
+### 유효범위
+```javascript
+var vscope = 'global';
+function fscope(){
+    vscope = 'local';
+    alert('함수안'+vscope); // 함수안local
+}
+fscope();
+alert('함수밖'+vscope); // 함수밖local
+```
+
+fscope 함수 내에서 vscope를 정의 할 때, var를 사용하지 않고 정의 했기 때문에 지역변수 생성이 아닌 전역변수 값 교체가 된 것이다.
+
+변수 선언시 var를 붙여 지역변수로 사용해야 좋다. 전역변수는 누군가에 의해 변경될 수 있고, 다른 어플리케이션 이식에 문제가 발생 할 수 있다. 
 
 document.querySelector('body').style.color = 'black'; -> css의 selector로 타겟 지정 
   
