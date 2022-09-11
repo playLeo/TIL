@@ -212,9 +212,73 @@ fscope 함수 내에서 vscope를 정의 할 때, var를 사용하지 않고 정
 
 변수 선언시 var를 붙여 지역변수로 사용해야 좋다. 전역변수는 누군가에 의해 변경될 수 있고, 다른 어플리케이션 이식에 문제가 발생 할 수 있다. 
 
-document.querySelector('body').style.color = 'black'; -> css의 selector로 타겟 지정 
-  
+* 불가피하게 전역변수를 사용해야 하는 경우는 하나의 객체를 전역변수로 만들고 객체의 속성으로 변수를 관리한다.
+```javascript
+MYAPP = {}
+MYAPP.calculator = {
+    'left' : null,
+    'right' : null
+}
+MYAPP.coordinate = {
+    'left' : null,
+    'right' : null
+}
+ 
+MYAPP.calculator.left = 10;
+MYAPP.calculator.right = 20;
+function sum(){
+    return MYAPP.calculator.left + MYAPP.calculator.right;
+}
+document.write(sum());
+```
 
+* 전역변수를 사용하고 싶지 않다면 아래와 같이 익명함수를 호출해 모듈화 한다.
+
+document.querySelector('body').style.color = 'black'; -> css의 selector로 타겟 지정 
+
+```javascript
+(function(){
+    var MYAPP = {}
+    MYAPP.calculator = {
+        'left' : null,
+        'right' : null
+    }
+    MYAPP.coordinate = {
+        'left' : null,
+        'right' : null
+    }
+    MYAPP.calculator.left = 10;
+    MYAPP.calculator.right = 20;
+    function sum(){
+        return MYAPP.calculator.left + MYAPP.calculator.right;
+    }
+    document.write(sum());
+}())
+```
+
+**자바스크립트는 함수에 대한 유효범위만을 제공한다!!**
+```javascript
+for(var i = 0; i < 1; i++){
+    var name = 'coding everybody';
+}
+alert(name); // coding everybody 정상 출력
+```
+
+**자바스크립트는 함수가 선언된 시점에서 유효범위를 갖는다. 정적 유효범위**
+```javascript
+var i = 5;
+ 
+function a(){
+    var i = 10;
+    b(); // 함수내 사용되는 시점인 지역변수 i를 쓰는게 아니라 b함수가 정의될 때, 전역변수 i를 사용한다.
+}
+ 
+function b(){
+    document.write(i);
+}
+ 
+a();  // 5
+```
 
 ### this 연산자 - 태그를 가리킨다. / 함수로 빼서 사용한다면 매개변수로 전달 해야한다.
 
