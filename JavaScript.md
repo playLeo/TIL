@@ -17,6 +17,9 @@ DOM API를 통해 HTML과 CSS를 동적으로 수정, 사용자 인터페이스�
 8. [클로저](#클로저)
 9. [arguments](#arguments)
 10. [함수의 호출](#함수의-호출)
+11. [생성자와 new](#생성자와-new)
+12. [전역객체](#전역객체)
+13. [this](#this)
 
 
 # 문법
@@ -525,20 +528,129 @@ alert(sum.apply(o2)) // 185
 
 
 
+## 생성자와 new
+
+```javascript
+var person = {
+    'name' : 'JJ',
+    'introduce' : function(){
+        return 'My name is '+this.name;
+    }
+}
+document.write(person.introduce());
+```
+
+위와 같은 방법으로 객체를 만든다면 구조가 같은 다른 사람의 이름을 담을 객체가 필요하다면 매번 객체의 정의를 반복해야한다.
+
+이를 해결하기 위해 생성자를 사용한다. -> 구조 재사용
+
+```javascript
+function Person(name){
+    this.name = name;
+    this.introduce = function(){
+        return 'My name is '+this.name; 
+    }   
+}
+var p1 = new Person('JJ');
+document.write(p1.introduce()+"<br />");
+ 
+var p2 = new Person('KK');
+document.write(p2.introduce());
+```
+
+
+## 전역객체
+
+모든 전역변수와 함수는 window 객체의 프로퍼티다. 명시하지 않아도 암시적으로 window의 프로퍼티로 간주
+
+```javascript
+var o = {'func':function(){
+    alert('Hello?');
+}}
+o.func();
+window.o.func();
+```
+
+## this
+
+this는 함수 내에서 함수 호출 맥락(context)를 의미한다. 맥락이라는 것은 상황에 따라서 달라진다는 의미이다. 즉 함수를 어떻게 호출하느냐에 따라서 this가 가리키는 대상이 달라진다는 뜻이다. 함수와 객체의 관계가 느슨한 자바스크립트에서 this는 이 둘의 연결시켜주는 실질적인 연결점 역할을 한다.
+
+함수를 호출했을 때 this는 전역객체인 window와 같다.
+```javascript
+function func(){
+    if(window === this){
+        document.write("window === this");
+    }
+}
+func(); // window === this
+```
+
+객체의 소속인 메소드의 this는 그 객체를 가르킨다.
+```javascript
+var o = {
+    func : function(){
+        if(o === this){
+            document.write("o === this");
+        }
+    }
+}
+o.func();  // o === this
+```
+
+함수로 호출하면 함수가 선언된 시점에 유효범위를 같는 정적 유효범위가 적용되 this는 window를 가르키고,
+
+생정자를 통해 함수를 호출하면 new를 통해 빈객체를 만들고 변수에 할당한다.
+
+```javascript
+var funcThis = null; 
+ 
+function Func(){
+    funcThis = this;
+    //if(o2==this){
+    //    document.write('Func함수에서의 o2 == this'); // undefined 오류. 빈객체를 만들고 변수에 할당하기 때문이다.
+    //}
+}
+var o1 = Func();
+if(funcThis === window){
+    document.write('window <br />');  // window
+}
+ 
+var o2 = new Func();
+if(funcThis === o2){
+    document.write('o2 <br />');  // o2
+```
+
+생성자는 빈 객체를 만든다. 그리고 이 객체내에서 this는 만들어진 객체를 가르킨다. 이것은 매우 중요한 사실이다. 생성자가 실행되기 전까지는 객체는 변수에도 할당될 수 없기 때문에 this가 아니면 객체에 대한 어떠한 작업을 할 수 없기 때문이다. 
+
+
+함수의 메소드인 apply, call을 이용하면 this의 값을 제어할 수 있다.
+
+```javascript
+var o = {}
+var p = {}
+function func(){
+    switch(this){
+        case o:
+            document.write('o<br />');
+            break;
+        case p:
+            document.write('p<br />');
+            break;
+        case window:
+            document.write('window<br />');
+            break;          
+    }
+}
+func();
+func.apply(o);
+func.apply(p);
+```
 
 
 
 
 
-### this 연산자 - 태그를 가리킨다. / 함수로 빼서 사용한다면 매개변수로 전달 해야한다.
 
-
-
-
-
-
-for(var key in student){
-  document.write(key + " : " + student[key]);}
 
 
 
