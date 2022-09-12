@@ -322,7 +322,7 @@ Vue는 숫자형, 문자형, Boolean 타입이 있다.
       new Vue({
         el: '#app',
         data: {
-          input_model:'',
+          input_model:'기본값',
           input_model2:'',
           textarea_model:'',
           checkbox_model:false,
@@ -335,6 +335,279 @@ Vue는 숫자형, 문자형, Boolean 타입이 있다.
 </body>
 ```
 
+* v-on : 이벤트 메소드와 연결
+
+```js
+<body>
+    <div id="app">
+      <!--v-on:click으로 클릭이벤트 설정 가능-->
+      <button v-on:click="countUp">1씩증가</button>
+      <p>{{ count }}</p>
+
+      <button :disabled="click" v-on:click="oneClick">한번만 클릭 가능</button>
+      <p>{{ text }}</p>
+
+      <!--함수 param전달-->
+      <button v-on:click="paramClick(10)">10씩증가</button>
+      <p>{{ tenCount }}</p>
+
+      <!--특정 키를 누를 때 함수 실행(포커스 상태에서)-->
+      <input v-on:keyup.enter="alertClick">
+    </div>
+
+    <script>
+      new Vue({
+        el: '#app',
+        data: {
+          count:0,
+          click:false,
+          text:"",
+          tenCount:0
+        },
+        methods: {
+          countUp() {
+            this.count++;
+          },
+          oneClick() {
+            this.click = true;
+            this.text = "click";
+          },
+          paramClick(num) {
+            this.tenCount += 10;
+          },
+          alertClick() {
+            alert("enter");
+          }
+        }
+      })
+    </script>
+  </body>
+```
+* v-if, v-else-if, v-else : 조건
+
+```js
+<body>
+    <div id="app">
+      <!--버튼 클릭시 클릭한 text출력과 클릭한 버튼 비활성-->
+      <button v-bind:disabled="one" v-on:click="oneCheck">one</button>
+      <button v-bind:disabled="two" v-on:click="twoCheck">two</button>
+      <button v-bind:disabled="three" v-on:click="threeCheck">three</button>
+      <p v-if="one">onc click</p>
+      <p v-else-if="two">two click</p>
+      <p v-else>three click</p>
+    </div>
+
+    <script>
+      new Vue({
+        el: '#app',
+        data: {
+          one: false,
+          two: false,
+          three: true,
+        },
+        methods: {
+          oneCheck() {
+            this.one = true;
+            this.two = false;
+            this.three = false;
+          },
+          twoCheck() {
+            this.one = false;
+            this.two = true;
+            this.three = false;
+          },
+          threeCheck() {
+            this.one = false;
+            this.two = false;
+            this.three = true;
+          }
+        }
+      })
+    </script>
+</body>
+```
+
+* v-for : 반복
+
+```js
+ <body>
+    <div id="app">
+      <ul>
+        <!--arr배열의 각 요소를 item에 담는다-->
+        <li v-for="item in arr">{{ item }}</li><br>
+
+        <!--object의 key값과 value를 불러와 출력가능-->
+        <li v-for="(value, key) in obj">{{ key }} : {{ value }}</li><br>
+
+        <!--objectArray의 item(Object)를 출력-->
+        <li v-for="(item) in objArr">{{ item.a}} : {{ item.b }} : {{ item.c }}</li><br>
+
+        <!--입력값을 추가 하는 기능-->
+        <input v-model="num">
+        <button v-on:click="add(num)">add</button>
+        <button v-on:click="deletes()">delete</button>
+        <li v-for="item in pushArr">{{item}}</li>
+      </ul>
+    </div>
+
+    <script>
+      new Vue({
+        el: '#app',
+        data: {
+          arr: ['쨈빵','멜론빵','크로와사'],
+          obj: {'a':1, 'b':2, 'c':3},
+          objArr: [{'a':1, 'b':2, 'c':3}, {'a':4, 'b':5, 'c':6}],
+          pushArr: [],
+          num:0
+        },
+        methods: {
+          add(val) {
+            this.pushArr.push(val);
+          },
+          deletes() {
+            this.pushArr.pop();
+          }
+        }
+      })
+    </script>
+  </body>
+```
+
+## 데이터 변화 감지
+
+### Computed
+
+어떤 값을 출력할 때 따로 연산을 추가해서 넣고 싶을 때, computed 속성의 프로퍼티에 정의하여 사용한다.
+
+```js
+<body>
+    <div id="app">
+      <input v-model="price" type="number">원 x
+      <input v-model="count" type="number">개
+      <p>　　　합계 {{ sum }} 원</p>
+      <p>세금포함 {{ taxIncluded }} 원</p>
+    </div>
+    <script>
+      new Vue({
+        el: '#app',
+        data: {
+          price: 100,
+          count: 1
+        },
+        <!--computed의 함수들은 항상 값을 반환해야하고, 함수 내부의 프로퍼티가 변경되면 실행된다.-->
+        computed: {
+          sum: function () {
+            return this.price * this.count;
+          },
+          taxIncluded: function() {
+            return this.sum * 1.08;
+          }
+        }
+      })
+    </script>
+</body>
+```
+
+### watch
+watch도 기본적으로는 computed처럼 값이 변경되면 실행된다. 하지만 computed는 무조건 반환값이 있어야하고, watch는 그렇지 않다. computed는 계산식, watch는 어떤 로직에 따른 처리르 할때 사용한다.
+
+```js
+<body>
+    <div id="app">
+      <p>금지문자는、「{{ forbiddenText }}」</p>
+      <textarea  v-model="inputText"></textarea>
+    </div>
+
+    <script>
+      new Vue({
+        el: '#app',
+        data: {
+          forbiddenText: '안되',
+          inputText: '오늘은 날씨가 좋습니다.'
+        },
+        watch: {
+          // 입력한 문자열을 감시한다.
+          inputText: function(){
+            //inputText프로퍼티가 계속변하기 때문에 watch에 살피다가 안되라는 단어가 나오면 삭제
+            var pos = this.inputText.indexOf(this.forbiddenText);
+            if (pos >= 0) {
+              alert(this.forbiddenText + "는 입력할 수 없습니다.");
+              this.inputText = this.inputText.substr(0,pos);
+            }
+          }
+        }
+      })
+    </script>
+  </body>
+```
+
+## Component
+컴포넌트는 같은 종류의 처리를 컴포넌트로 묶어 여러곳에서 사용하게 하는 방법이다.
+
+Component를 등록하는 방법은 글로벌과 로컬 두가지가 있다.
+
+글로벌
+```js
+Vue.component('컴포넌트 태그', {template : "HTML 코드"});
+```
+
+글로벌은 위와같이 Vue.component를 사용해 등록할 수 있다. 이렇게 하면 이후에 생성되는 vue 인스턴스에서도 사용가능해진다. 전역변수라 생각하면 된다. 하지만 글로벌은 사용하지 않아도 계속 남아있기 때문에 성능에 문제가 생길 수 있다.
 
 
-v-bind 태그의 속성을 vue에서 지정할 
+로컬
+```js
+<body>
+    <div id="app">
+      <!--컴포넌트 태그명을 사용해 컴포넌트 사용-->
+      <my-component></my-component>
+      <my-component></my-component>
+      <my-component></my-component>
+    </div>
+
+    <script>
+      //Component 변수
+      var MyComponent = {
+        template: `<p class="my-comp">Hello</p>`
+      }
+      new Vue({
+        el: '#app',
+        components: {     //컴포넌트 등록, 이후 컴포넌트태그를 HTML코드에 넣고 사용
+          'my-component': MyComponent
+        }
+      })
+    </script>
+<body>
+```
+
+### props
+컴포넌트를 사용할 때 HTML의 컴포넌트 태그에서 데이터를 props를 이용해 전달받을 수 있다.
+
+주의할 점은 props의 프로퍼티명은 myName과 같이 카멜케이스로 쓰고 HTML에서는 my-name처럼 케밥케이스로쓴다.
+```js
+ <body>
+    <h2>컴포넌트에 값을 전달하는 예제</h2>
+    <div id="app">
+      <!--my-name태그로 myName 프로퍼티에 값을 전달한다.-->
+      <my-component my-name="철수"></my-component>
+      <my-component my-name="영희"></my-component>
+      <my-component></my-component>
+    </div>
+
+    <script>
+      var MyComponent = {
+        template: '<p class="my-comp">나는 {{ myName }} 입니다.</p>',
+        props: {
+          myName: String	//my-name으로부터 값을 받는다.
+        },
+      }
+      new Vue({
+        el: '#app',
+        components: {
+          'my-component': MyComponent
+        }
+      })
+    </script>
+  </body>
+```
+
+참고자료 https://cjw-awdsd.tistory.com/33
