@@ -125,3 +125,118 @@ ___
 3. views/Home.vue & views/About.vue 파일 - views 폴더는 사용자가 보이는 뷰들을 관리하는 폴더
 4. asset - public 한 이미지나 파일들을 저장
 
+**Vue가 실행되지 않아 아래 작업을 수행했다.**
+
+powerShell 관리자 권한으로 실행
+
+get-executionpolicy // 확인
+
+set-executionpolicy remotesigned // 체크
+
+get-executionpolicy // 확인
+
+
+# 문법
+
+## Vue 인스턴스
+Vue.js로 프론트엔드를 개발할때는 Vue 인스턴스를 만드는 것부터 시작한다.
+```js
+new Vue({
+    el: "#app",
+    data: {
+        text: 'hello world'
+    },
+})
+```
+
+## 데이터 표시 {{데이터}}
+
+```js
+<!DOCTYPE html>
+<html>
+  ...
+  <body>
+    <div id="app">
+      <p> {{ myText }}</p>  <!--myText의 값 출력-->
+    </div>
+
+    <script>
+      new Vue({
+        el: '#app',          //id="app"
+        data: {              
+          myText:'Hello!!!'  //myText라는 프로퍼티
+        }
+      })
+    </script>
+  </body>
+</html>
+```
+
+### 디렉티브
+디렉티브는 Vue에서 HTML 요소에 대해 실행하는 명령어이다. 디렉티브는 'v-'가 붙어있다.
+
+```js
+<body>
+    <h2>HTML로 표시하는 예제</h2>
+    <div id="app">
+        <p>{{ myText }}</p> // <h1>Hello!!!</h1>
+        <p v-text="myText"></p> // <h1>Hello!!!</h1>
+        <p v-html="myText"></p> Hello!!! -> h1태그가 적용된 Hello!!!가 나온다.
+    </div>
+    <script>
+        new Vue({
+            el: '#app',
+            data: {
+                myText:'<h1>Hello!!!</h1>'
+            }
+        })
+    </script>
+</body>
+```
+
+## 데이터 종류
+Vue는 숫자형, 문자형, Boolean 타입이 있다.
+
+```js
+ <body>
+    <div id="app">
+      <p>{{ myPrice * 1.08 }}</p>
+      <p>{{ "안녕하세요~ "+ myName + "님" }}</p>
+      <p>{{ myName.substr(0,1) }}</p>
+    </div>
+
+    <script>
+      new Vue({
+        el: '#app',
+        data: {
+          myPrice:500,       //숫자형
+          myName:'홍길동'    //문자형
+        }
+      })
+    </script>
+  </body>
+```
+
+배열과 객체도 data 객체에 넣어 사용할 수 있다.
+```js
+<body>
+    <h2>배열로 값을 표시하는 예제</h2>
+    <div id="app">
+      <p>{{ myArray }}</p>
+      <p>{{ myArray[0] }}</p>
+      <p>{{ myObject.name }}</p>
+      <p>{{ myObject.price }}</p>
+    </div>
+
+    <script>
+      new Vue({
+        el: '#app',
+        data: {
+          myArray:['다즐링','얼그레이','실론'],
+          myObject:{name:'다즐링', price:600}
+        }
+      })
+    </script>
+</body>
+```
+
