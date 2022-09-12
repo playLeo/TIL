@@ -6,6 +6,16 @@ DOM API를 통해 HTML과 CSS를 동적으로 수정, 사용자 인터페이스�
 
 주기적으로 갱신되거나, 사용자와 상호작용이 가능하거나, 애니메이션이 적용된 2D/3D 그래픽을 볼 수 있다면 JavaScript가 관여하고 있을거라고 생각해도 좋다.
 
+## 목차
+1. [함수](#함수)
+2. [배열](#배열)
+3. [객체](#객체-key-value)
+4. [모듈](#모듈)
+5. [정규표현식](#정규표현식)
+6. [유효범위](#유효범위)
+7. [함수와 콜백](#함수와-콜백)
+8. [클로저](#클로저)
+
 
 ## 문법
 
@@ -47,7 +57,8 @@ var numbering = function (){
 numbering();
 ```
 
-### 배열 - 선언시 대괄호를 사용한다.
+### 배열
+선언시 대괄호를 사용한다.
 
 ```javascript
 var coworkers = ['egoing','leezche','duru','taeho'];
@@ -78,7 +89,7 @@ coworkers.sort();
 coworkers.reverse();
 ```
 
-### 객체 - key, value
+### 객체 key, value
 
 선언방법 3가지
 
@@ -154,7 +165,8 @@ console.log( 'The area of a circle of radius 4 is '
            + circle.area(4));
 ```
 
-### 정규표현식 - 문자열에서 특정한 문자를 찾아내는 도구
+### 정규표현식
+문자열에서 특정한 문자를 찾아내는 도구
 
 정규표현식은 두가지 단계로 이루어진다. 하나는 컴파일 다른 하나는 실행이다.
 
@@ -279,6 +291,167 @@ function b(){
  
 a();  // 5
 ```
+
+### 함수와 콜백
+
+JavaScript에서는 함수도 객체다. 다시 말해서 일종의 값이다.
+
+값으로서의 함수
+
+```javascript
+function cal(func, num){
+    return func(num) // 함수 내의 함수는 메소드다.
+}
+function increase(num){
+    return num+1
+}
+function decrease(num){
+    return num-1
+}
+alert(cal(increase, 1));
+alert(cal(decrease, 1));
+```
+
+함수는 함수의 리턴 값으로도 사용할 수 있다.
+```javascript
+function cal(mode){
+    var funcs = {
+        'plus' : function(left, right){return left + right},
+        'minus' : function(left, right){return left - right}
+    }
+    return funcs[mode];
+}
+alert(cal('plus')(2,1));
+alert(cal('minus')(2,1)); 
+```
+
+배열의 값으로도 사용할 수 있다.
+
+```javascript
+var process = [
+    function(input){ return input + 10;},
+    function(input){ return input * input;},
+    function(input){ return input / 2;}
+];
+var input = 1;
+for(var i = 0; i < process.length; i++){
+    input = process[i](input);
+}
+alert(input);
+```
+
+#### 콜백
+함수의 인자가 함수인 경우
+
+```javascript
+function sortNumber(a,b){
+    return b-a;
+}
+var numbers = [20, 10, 9,8,7,6,5,4,3,2,1];
+alert(numbers.sort(sortNumber));
+```
+
+**비동기 처리**
+
+콜백은 비동기처리에서도 유용하게 사용된다. 시간이 오래걸리는 작업이 있을 때 이 작업이 완료된 후에 처리해야 할 일을 콜백으로 지정하면 해당 작업이 끝났을 때 미리 등록한 작업을 실행하도록 할 수 있다.
+
+
+#### 클로저
+클로저(closure)는 내부함수가 외부함수의 맥락(context)에 접근할 수 있는 것을 가르킨다.
+
+내부함수 inner 에서 외부함수 outter의 지역변수에 접근할 수 있다.
+
+```javascript
+function outter(){
+    var title = 'coding everybody';  
+    function inner(){        
+        alert(title);
+    }
+    inner();
+}
+outter(); // coding everybody가 실행 된다.
+```
+
+**클로저(closure)** 는 내부함수와 밀접한 관계를 가지고 있는 주제다. 내부함수는 외부함수의 지역변수에 접근 할 수 있는데 외부함수의 실행이 끝나서 외부함수가 소멸된 이후에도 내부함수가 외부함수의 변수에 접근 할 수 있다. 이러한 메커니즘을 클로저라고 한다.
+
+```javascript
+function outter(){
+    var title = 'coding everybody';  
+    return function(){        
+        alert(title);
+    }
+}
+inner = outter(); // 익명 내부함수가 담긴다. 바로 실행하려면 outter()();
+inner();
+```
+
+outter 함수가 실행되고 지역변수인 title가 사라지지 않고 내부함수가 사라질 때 까지 살아 있는 것이 클로저의 특성이다.
+
+
+좀더 복잡한 예제
+```javascript
+function factory_movie(title){
+    return {
+        get_title : function (){
+            return title;
+        },
+        set_title : function(_title){
+            title = _title
+        }
+    }
+}
+ghost = factory_movie('Ghost in the shell');
+matrix = factory_movie('Matrix');
+ 
+alert(ghost.get_title());
+alert(matrix.get_title());
+ 
+ghost.set_title('공각기동대');
+ 
+alert(ghost.get_title());
+alert(matrix.get_title());
+```
+
+외부 함수가 실행될 때마다 새로운 지역변수를 포함하는 클로저가 생성되서 ghost와 martirx는 서로 완전한 독립된 객체가 되고,
+
+get_title, set_title 에서의 지역변수 title은 내부함수가 사용하고 있어 소멸되지 않고, 공유되고 있다.
+
+이러한 특징으로 javascript에서의 private한 속성을 사용할 수 있게된다.
+
+
+클로저를 이해하느 예제
+```javascript
+var arr = []
+for(var i = 0; i < 5; i++){
+    arr[i] = function(){
+        return i;
+    }
+}
+for(var index in arr) {
+    console.log(arr[index]()); //결과는 5 5 5 5 5  
+}
+```
+for는 함수가 아니기 때문에 클로저의 속성을 유지시켜줄 수 없다.
+
+아래와 같이 수정 해야한다.
+
+```javascript
+var arr = []
+for(var i = 0; i < 5; i++){
+    arr[i] = function(id) {
+        return function(){
+            return id;
+        }
+    }(i);
+}
+for(var index in arr) {
+    console.log(arr[index]());
+} // 0, 1, 2, 3, 4
+```
+
+
+
+
 
 ### this 연산자 - 태그를 가리킨다. / 함수로 빼서 사용한다면 매개변수로 전달 해야한다.
 
