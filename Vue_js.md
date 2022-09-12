@@ -1,3 +1,8 @@
+## 목차
+1. [Vue.js란?](Vuejs란)
+2. 
+
+
 ## Vue.js란?
 
 컴포넌트 기반의 SPA를 구축할 수 있게 해주는 프레임워크
@@ -172,28 +177,6 @@ new Vue({
 </html>
 ```
 
-### 디렉티브
-디렉티브는 Vue에서 HTML 요소에 대해 실행하는 명령어이다. 디렉티브는 'v-'가 붙어있다.
-
-```js
-<body>
-    <h2>HTML로 표시하는 예제</h2>
-    <div id="app">
-        <p>{{ myText }}</p> // <h1>Hello!!!</h1>
-        <p v-text="myText"></p> // <h1>Hello!!!</h1>
-        <p v-html="myText"></p> Hello!!! -> h1태그가 적용된 Hello!!!가 나온다.
-    </div>
-    <script>
-        new Vue({
-            el: '#app',
-            data: {
-                myText:'<h1>Hello!!!</h1>'
-            }
-        })
-    </script>
-</body>
-```
-
 ## 데이터 종류
 Vue는 숫자형, 문자형, Boolean 타입이 있다.
 
@@ -240,3 +223,118 @@ Vue는 숫자형, 문자형, Boolean 타입이 있다.
 </body>
 ```
 
+### 디렉티브
+디렉티브는 Vue에서 HTML 요소에 대해 실행하는 명령어이다. 디렉티브는 'v-'가 붙어있다.
+
+* v-test
+* v-html
+
+```js
+<body>
+    <h2>HTML로 표시하는 예제</h2>
+    <div id="app">
+        <p>{{ myText }}</p> // <h1>Hello!!!</h1>
+        <p v-text="myText"></p> // <h1>Hello!!!</h1>
+        <p v-html="myText"></p> Hello!!! -> h1태그가 적용된 Hello!!!가 나온다.
+    </div>
+    <script>
+        new Vue({
+            el: '#app',
+            data: {
+                myText:'<h1>Hello!!!</h1>'
+            }
+        })
+    </script>
+</body>
+```
+
+* v-bind : 태그의 속성을 vue에서 지정할 수 있는 디렉티브
+```js
+// 라디오와 url이 작동하지 않는다. 따로하면 되는데 이유는 모르겠다.
+<body>
+    <div id="app">
+      <input :type='type1'>        <!-- v-bind 생략 가능 -->
+      <input v-bind:type='type2'>
+      <a :href='url'>url</a>
+      <p v-bind:class='class1'>v-bind 클래스지정</p>
+      <p v-bind:class='[class1, class2]'>다중 클래스 지정</p>
+      <p v-bind:class="{'test-class1': isON}">클래스 ON/OFF</p>  <!-- isON의 값이 true/false-->
+    </div>
+
+    <script>
+      new Vue({
+        el: '#app',
+        data: {
+          url:'https://naver.com',
+          type1:'radio',
+          type2:'text'
+          class1:'test-class1',
+          class2:'test-class2',
+          isON: true
+        }
+      })
+    </script>
+</body>
+```
+
+* v-model : input에서 입력한 값을 프로퍼티에 저장
+```js
+<body>
+    <h2>입력한 문자열을 표시하는 예제</h2>
+    <div id="app">
+      <!--v-model을 사용해 프로퍼티에 값을 input값으로 저장가능-->
+      <input v-model="input_model" placeholder="이름">
+      <p>input model : {{input_model}}</p>
+
+      <!--lazy는 input의 포커스를 다른곳으로 이동할 때 프로퍼티에 저장하는 기능-->
+      <input v-model.lazy="input_model2">
+      <p>input lazy model : {{input_model2}}</p>
+
+      <!--textarea에서도 v-model 사용가능-->
+      <textarea v-model="textarea_model"></textarea>
+      <p>textarea model : {{textarea_model}}</p>
+
+      <!--checkbox에서 사용 예제 저장된 프로퍼티를 v-bind를 통해 로직 실행가능-->
+      <input type="checkbox" v-model="checkbox_model" value="awd">
+      <button v-bind:disabled="checkbox_model === false">disabledd</button>
+      <p>checkbox model : {{checkbox_model}}</p>
+
+      <!--프로퍼티를 배열로 선언하면 value값을 저장-->
+      <input type="checkbox" v-model="checkbox_model2" value="test1">
+      <input type="checkbox" v-model="checkbox_model2" value="test2">
+      <p>checkbox model : {{checkbox_model2}}</p>
+
+      <!--라디오 프로퍼티 저장-->
+      <input type="radio" v-model="radio_model" value="test1">
+      <input type="radio" v-model="radio_model" value="test2">
+      <input type="radio" v-model="radio_model" value="test3">
+      <p>radio model : {{radio_model}}</p>
+
+      <!--select 프로퍼티 저장-->
+      <select v-model="select_model">
+        <option>test1</option>
+        <option>test2</option>
+      </select>
+      <p>select model : {{select_model}}</p>
+    </div>
+
+    <script>
+      new Vue({
+        el: '#app',
+        data: {
+          input_model:'',
+          input_model2:'',
+          textarea_model:'',
+          checkbox_model:false,
+          checkbox_model2:[],
+          radio_model:'',
+          select_model:''
+        }
+      })
+    </script>
+</body>
+```
+
+
+
+v-bind 태그의 속성을 vue에서 지정할 
