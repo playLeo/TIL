@@ -20,6 +20,11 @@ DOM API를 통해 HTML과 CSS를 동적으로 수정, 사용자 인터페이스�
 11. [생성자와 new](#생성자와-new)
 12. [전역객체](#전역객체)
 13. [this](#this)
+14. [상속](#상속)
+15. [Prototype](#Prototype)
+16. [표준 내장 객체](#표준-내장-객체)
+17. [Object](#Object)
+18. [참조](#참조)
 
 
 # 문법
@@ -647,11 +652,111 @@ func.apply(p);
 ```
 
 
+## 상속
+
+```javascript
+function Person(name){
+    this.name = name;
+}
+Person.prototype.name=null;
+Person.prototype.introduce = function(){
+    return 'My name is '+this.name; 
+}
+ 
+function Programmer(name){
+    this.name = name;
+}
+Programmer.prototype = new Person(); // prototype을 통해 설정된 값을 상속
+Programmer.prototype.coding = function(){ // 상속받는 Programmer 객체에 기능 추가
+    return "hello world";
+}
+ 
+var p1 = new Programmer('WWA');
+document.write(p1.introduce()+"<br />"); // My name is WWA
+document.write(p1.coding()+"<br />"); // hello world
+```
+
+## Prototype
+객체는 프로퍼티를 가질 수 있는데 prototype이라는 프로퍼티는 그 용도가 약속되어 있는 특수한 프로퍼티다. prototype에 저장된 속성들은 생성자를 통해서 객체가 만들어질 때 그 객체에 연결된다. 
+
+```javascript
+function Ultra(){}
+Ultra.prototype.ultraProp = true;
+ 
+function Super(){}
+Super.prototype = new Ultra();
+ 
+function Sub(){}
+Sub.prototype = new Super();
+ 
+var o = new Sub();
+console.log(o.ultraProp); // ture
+```
+ >Super.prototype = Ultra.prototype 으로하면 안된다. 이렇게하면 Super.prototype의 값을 변경하면 그것이 Ultra.prototype도 변경하기 때문이다.
+ > Super.prototype = new Ultra();는 Ultra.prototype의 원형으로 하는 객체가 생성되기 때문에 new Ultra()를 통해서 만들어진 객체에
+ >  변화가 생겨도 Ultra.prototype의 객체에는 영향을 주지 않는다.
 
 
+## 표준 내장 객체
+자바스크립트의 표준 내장 객체
+* Object
+* Function
+* Array
+* String
+* Boolean
+* Number
+* Math
+* Date
+* RegExp
 
+확장 가능
+```javascript
+Array.prototype.rand = function(){
+    var index = Math.floor(this.length*Math.random());
+    return this[index];
+}
+var arr = new Array('seoul','new york','ladarkh','pusan', 'Tsukuba');
+console.log(arr.rand());
+```
 
+## Object
+자바스크립트의 모든 객체는 Object 객체를 상속 받는다.
 
+Object 객체는 객체의 가장 기본적인 형태를 가지고 있는 객체이다. 자바스크립트에서는 값을 저장하는 기본적인 단위로 Object를 사용한다.
+
+## 참조
+```javascript
+var a = {'id':1};
+var b = a;
+b.id = 2;
+console.log(a.id);  // 2
+```
+
+객체는 call by reference 와 같다
+
+```javascript
+var a = {'id':1};
+var b = a;
+b.id = 2;
+console.log(a.id);  // 2
+______________________________________
+var a = 1;
+function func(b){
+    b = 2;
+}
+func(a);
+console.log(a); //1
+```
+
+아래 코드는 레퍼런스가 갔기 때문에 결과가 2로 나올거 같지만, 
+```javascript
+var a = {'id':1};
+function func(b){
+    b = {'id':2};
+}
+func(a);
+console.log(a.id);  // 1
+```
 
 
 #### CSS 특징 ':' , ';', '{}'
