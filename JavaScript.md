@@ -725,11 +725,13 @@ console.log(arr.rand());
 Object 객체는 객체의 가장 기본적인 형태를 가지고 있는 객체이다. 자바스크립트에서는 값을 저장하는 기본적인 단위로 Object를 사용한다.
 
 ## 참조
+재정의 하는 순간 레퍼런스 유지가 끊어지는 듯 하다. 새로운 주소에 할당되서 그러는듯. '.'으로 레퍼런스 접근하면 수정가능
 ```javascript
 var a = {'id':1};
-var b = a;
-b.id = 2;
-console.log(a.id);  // 2
+var b = a; // b.id == 1
+a.id = 6; // b.id == 6
+b = {'id':10}; // b.id == 10
+a.id = 20; // b.id == 10
 ```
 
 객체는 call by reference 와 같다
@@ -748,7 +750,6 @@ func(a);
 console.log(a); //1
 ```
 
-아래 코드는 레퍼런스가 갔기 때문에 결과가 2로 나올거 같지만, 
 ```javascript
 var a = {'id':1};
 function func(b){
@@ -756,6 +757,15 @@ function func(b){
 }
 func(a);
 console.log(a.id);  // 1
+
+____________________________
+
+var a = {'id':1};
+function func(b){
+    b.id = 2;
+}
+func(a);
+console.log(a.id);  // 2
 ```
 
 
