@@ -61,10 +61,11 @@ fuction backgroundSetColor(color){
 }
 ```
 
-* 변수를 함수로 정의가 가능하다.
+* 변수를 함수로 정의가 가능하다. 
+* 함수 표현식은 hoisting되지 않는다.
 
 ```javascript
-var numbering = function (){  //ES6의 메소드명(){}으로 선언가능 // 메소드명: () => {}
+var numbering = function (){  
     i = 0;
     while(i < 10){
         document.write(i);
@@ -73,6 +74,12 @@ var numbering = function (){  //ES6의 메소드명(){}으로 선언가능 // �
 }
 numbering();
 ```
+```js
+var ddd = () => {console.log('ddd')}
+
+```
+
+**json 타입에 메소드명(){} 메소드가 들어가서 이상했는데 메소드명이 key, 선언부가 익명함수로 value로 설정되는듯 하다.**
 
 ## 배열
 선언시 대괄호를 사용한다.
