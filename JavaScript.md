@@ -75,7 +75,7 @@ var numbering = function (){
 numbering();
 ```
 ```js
-var ddd = () => {console.log('ddd')}
+var ddd = () => {console.log('ddd')} //화살표 함수는 메소드로 사용할 때, this를 바인딩 하지 않는다.
 
 ```
 
