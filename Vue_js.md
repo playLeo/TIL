@@ -314,6 +314,7 @@ new Vue({
           type2:'text'
           class1:'test-class1',
           class2:'test-class2',
+          <!--class2:{class2:'test-class2'} -->
           isON: true,
           class4:{
              on:true
