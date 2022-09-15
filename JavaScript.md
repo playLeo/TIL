@@ -64,7 +64,7 @@ fuction backgroundSetColor(color){
 * 변수를 함수로 정의가 가능하다.
 
 ```javascript
-var numbering = function (){
+var numbering = function (){  //ES6의 메소드명(){}으로 선언가능 // 메소드명: () => {}
     i = 0;
     while(i < 10){
         document.write(i);
