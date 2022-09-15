@@ -2,7 +2,8 @@
 1. [Vue.js란?](#vuejs란)
 2. [문법 - 바인딩](#데이터-표시)
 3. [문법 - 데이터 타입](#데이터-종류)
-4. [문법 - 디렉티브](#디렉티브)
+4. [문법 - 메소드](#메소드)
+5. [문법 - 디렉티브](#디렉티브)
 
 <details>
 <summary>Spring & Vue.js 연동</summary>
@@ -233,7 +234,38 @@ Vue는 숫자형, 문자형, Boolean 타입이 있다.
 </body>
 ```
 
-### 디렉티브
+## 메소드
+vue 인스턴스의 파라미터로 던진 객체 내부에서 메소드를 만들 때, methods: {} 를 사용한다.
+
+중간정리하자면
+
+1. el: \'~~\'  // key : el, value : binding대상
+2. data메소드 정의 -> date(){return } 
+```js
+new Vue({
+        el: '#app',
+        data: { //return 해도되고 안해도 되나?  return 들어가면 {}; 세미콜론 찍는다.
+          one: false,
+          two: ture  // 마지막에 세미콜론 안들어가네 ? 들어가면 오류뜬다.
+        },
+        methods: {
+          oneCheck() { // 메소드를 선언할 때는 화살표 함수를 사용하지 않는다. vue 객체내부를 접근 해야하는데 화살표 함수는 this가 바인딩 되지 않는다.
+            this.one = true;
+            this.two = false;
+            this.three = false;
+          },
+          twoCheck() {
+            this.one = false;
+            this.two = true;
+            this.three = false;
+          }
+        }
+      })
+```
+
+
+
+## 디렉티브
 디렉티브는 Vue에서 HTML 요소에 대해 실행하는 명령어이다. 디렉티브는 'v-'가 붙어있다.
 
 * v-test
@@ -356,7 +388,8 @@ Vue는 숫자형, 문자형, Boolean 타입이 있다.
 <body>
     <div id="app">
       <!--v-on:click으로 클릭이벤트 설정 가능-->
-      <button v-on:click="countUp">1씩증가</button>
+      <button v-on:click="countUp">1씩증가</button> <!-- 메소드 실행하는데 () 괄호 없어도 되네? -->
+      <!--<button @click="countUp">1씩증가</button> v-on:을 @로 생략가능-->
       <p>{{ count }}</p>
 
       <button :disabled="click" v-on:click="oneClick">한번만 클릭 가능</button>
