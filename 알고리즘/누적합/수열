@@ -1,0 +1,49 @@
+![img](https://s1.md5.ltd/image/0334fada5472ef8bf1591fe0f51f502f.png)
+
+```java
+import java.io.BufferedReader;
+import java.io.InputStreamReader;
+import java.io.IOException;
+import java.util.Arrays;
+import java.util.Comparator;
+import java.util.StringTokenizer;
+
+public class Main {
+
+    public static void main(String[] args) throws IOException {
+
+        BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
+        StringTokenizer st = new StringTokenizer(br.readLine());
+
+        int n = Integer.parseInt(st.nextToken());
+        int k = Integer.parseInt(st.nextToken());
+
+        int[] arr = new int[n+1];
+        int[] prefix = new int[n+1];
+
+        st = new StringTokenizer(br.readLine());
+
+        arr[1] = prefix[1] = Integer.parseInt(st.nextToken());
+
+        for (int i = 2; i <= n; i++) {
+            arr[i] = Integer.parseInt(st.nextToken());
+            prefix[i] = arr[i] + prefix[i - 1];
+        }
+
+        int max = Integer.MIN_VALUE;
+
+        for (int i = k ; i <= n; i++) {
+            max = Math.max(max, prefix[i]- prefix[i-k]);
+        }
+
+        System.out.println(max);
+
+
+
+
+    }
+
+}
+
+
+```
