@@ -270,6 +270,7 @@ Vue는 숫자형, 문자형, Boolean 타입이 있다.
       <p v-bind:class='class1'>v-bind 클래스지정</p>
       <p v-bind:class='[class1, class2]'>다중 클래스 지정</p>
       <p v-bind:class="{'test-class1': isON}">클래스 ON/OFF</p>  <!-- isON의 값이 true/false-->
+      <p :class='[class2, class4]'>배열로 넘긴 class4를 json타입으로 ture false를 통해 넘기고 조작 가능</p>
     </div>
 
     <script>
@@ -281,7 +282,10 @@ Vue는 숫자형, 문자형, Boolean 타입이 있다.
           type2:'text'
           class1:'test-class1',
           class2:'test-class2',
-          isON: true
+          isON: true,
+          class4:{
+             on:true
+             off:flase
         }
       })
     </script>
