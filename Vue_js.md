@@ -13,6 +13,26 @@
 
 node.js 설치후 npm으로 vue cli설치
 
+ npm 버전확인은 되지만 npm run serve 실행시 아래와 같은 오류 발생 ....
+ 
+ ```
+ npm ERR! Missing script: "serve"
+npm ERR!
+npm ERR! To see a list of scripts, run:
+npm ERR!   npm run
+ ```
+ 
+ 구글링 결과 node.js 다른 버전 설치후 install 안한 상태에서 npm 사용하면 해결된다고 한다.
+ 
+ nvm설치후 node.js 버전 16.17.0 -> 16.16.0 설치
+ 
+ nvm use 16.16.0 실행시 아래와 같은 오류 발생 -> powershell 관리자 권한으로 실행후 명령어를 실행했다.
+ ```
+ exit status 5: �׼����� �źεǾ����ϴ�.
+
+exit status 1: ������ �̹� �����Ƿ� ���� �� �����ϴ�.
+ ```
+
 <details>
 <summary>npm 이란?</summary>
 <div mardown="1">
