@@ -27,7 +27,7 @@ npm ERR!   npm run
  프로젝트 새로 생성해서 해결
  
  nvm설치후 node.js 버전 16.17.0 -> 16.11.1 (nvm use 16.11.1 에서 145에러가 발생해서 nvm도 삭제후 scoop을 통해 다시 설치하고 사용했다.)
-
+https://jaegeun.tistory.com/62
  
 
 <details>
