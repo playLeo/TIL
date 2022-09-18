@@ -24,14 +24,13 @@ npm ERR!   npm run
  
  구글링 결과 node.js 다른 버전 설치후 install 안한 상태에서 npm 사용하면 해결된다고 한다.
  
- nvm설치후 node.js 버전 16.17.0 -> 16.16.0 설치
- 
- nvm use 16.16.0 실행시 아래와 같은 오류 발생 -> powershell 관리자 권한으로 실행후 명령어를 실행했다.
- ```
- exit status 5: �׼����� �źεǾ����ϴ�.
+ nvm설치후 node.js 버전 16.17.0 -> 16.16.0, 14.20.2, 14.17.6 설치
 
-exit status 1: ������ �̹� �����Ƿ� ���� �� �����ϴ�.
- ```
+ * 16.16.0 -> npm ERR! Missing script: "serve"  npm ERR! npm run
+ * 14.20.2, 14.17.6 -> missing script: serve
+
+해결이 안됐다 .... node.js 재설치 및 vue/cli 재설치 -> npm uninstall @vue-cli-g 명령어 안먹어서 appdata 에서 수동삭제
+-> 초기 init pull 받고 node_module이 왜없는지 모르겟지만 npm i로 다시 생성후 ...
 
 <details>
 <summary>npm 이란?</summary>
