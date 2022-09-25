@@ -53,6 +53,25 @@ Garbage Collection이란 메모리 관리 기법 중의 하나로, 프로그램�
 2. Mark and Sweep - threa의 stack, method area 등 heap 영역 참조가 가능한 영역을 Root Set이라 하고 Root Set부터 참조상태를 확인하고(Mark) unreachable한 객체를 해제한다(Sweep).
 <img src="https://velog.velcdn.com/images%2Frecordsbeat%2Fpost%2F40b78c47-247d-428b-a482-065116b2d6c2%2F0_-dB_3FTm5N-5kjN6.gif" width="45%" height="30%">
 
+* Stop the World
+가비지 컬렉션을 실행하기 위해 JVM이 애플리케이션의 실행을 멈추는 작업이다. GC가 실행될 때는 
+GC를 실행하는 쓰레드를 제외한 모든 쓰레드들의 작업이 중단되고, GC가 완료되면 작업이 재개된다.
+GC의 성능 개선을 위해 튜닝을 한다고 하면 보통 stop-the-world의 시간을 줄이는 작업을 하는 것이다.
+
+
+https://junghyungil.tistory.com/133 - memory leak 정리
+https://techblog.woowahan.com/2628/ - memory leak 해결
+https://jithub.tistory.com/300 - heap dump 
+
+# Memory Leak
+CS 의미로 살펴볼 때, 컴퓨터 프로그램이 필요하지 않은 메모리를 계속 점유하고 있는 현상을 의미하고 자바에서는 더이상 사용되지 않는 객체들이 GC에 의해 회수되지 않고 계속 누적되는 현상을 말한다.
+
+GC가 되지 않는 루트 참조 객체는 크게 3가지다.
+1. Static 변수에 의한 객체 참조
+    *  static은 GC에 대상이 되지 않는다. Static변수는 클래스가 생성될 때 메모리를 할당 받고 프로그램이 종료되는 시점에 반환되므로 사용하지 않고 있어도 메모리가 있다.
+2. 모든 현재 자바 슬레드 스택내의 지역 변수, 매개변수에 의한 객체 참조
+    * 자바에서 현재 실행중인(각 스레드별로) 모든 메소드내에 선언된 지역 변수와 매개변수에 의해 참조되는 객체와 그 객체로부터 직간접적으로 참조되는 모든 객체는 참조되어 사용될 가능성이 있으며,  
+
 
 **참조**
  * https://velog.io/@recordsbeat/Garbage-Collector-%EC%A0%9C%EB%8C%80%EB%A1%9C-%EC%95%8C%EA%B8%B0
