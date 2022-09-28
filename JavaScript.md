@@ -26,7 +26,8 @@ DOM API를 통해 HTML과 CSS를 동적으로 수정, 사용자 인터페이스�
 17. [Prototype](#prototype)
 18. [표준 내장 객체](#표준-내장-객체)
 19. [Object](#object)
-20. [참조](#참조)
+20. [Array filter](#Array-filter)
+21. [참조](#참조)
 
 
 # 문법
@@ -781,6 +782,40 @@ function func(b){
 func(a);
 console.log(a.id);  // 2
 ```
+
+## Array filter 
+
+aaray 함수 중 가장 많이 쓰이는 함수 map. filter, reduce 3 대장 중 하나다.
+
+주어진 배열의 값들을 오름차순으로 접근해 callbackfn을 통해 true를 반환하는 요소를 기준으로 신규 배열을 만들어 반환한다.
+```js
+const numbers = [1, 2, 3, 4, 5];
+const result = numbers.filter(number => number > 3);
+
+console.log(numbers);
+// [1, 2, 3, 4, 5];
+
+console.log(result);
+// [4, 5]
+```
+
+아래 코드와 같이 json과 같은 객체를 사용해 true를 판별할 수 있다.
+
+```js
+const guys = [
+    { name: 'YD', money: 500000 },
+    { name: 'Bill', money: 400000 },
+    { name: 'Andy', money: 300000 },
+    { name: 'Roky', money: 200000 }
+];
+
+const rich = guys.filter(man => man.money > 300000);
+
+console.log(rich);
+// [{name: "YD", money: 500000}]
+```
+
+
 
 
 #### CSS 특징 ':' , ';', '{}'
