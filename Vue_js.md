@@ -53,7 +53,7 @@ Node.js로 만들어진 모듈을 웹에서 받아서 설치하고 관리해주�
 </details>
 
 
-intellij 프로젝트 안에서 npm 명령어를 powerShell, Command Prompt로 해봐도 안되서 cmd 창으로 설치하고 node -v 와
+intellij 프로젝트 안에서 npm 명령어를 powerShell, Command Prompt로 해봐도 안돼서 cmd 창으로 설치하고 node -v 와
 npm -v로 설치를 확인했다.
 
 * npm install -g @vue/cli
