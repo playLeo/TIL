@@ -41,3 +41,10 @@ namespace는 프로세스를 독립시켜주는 가상화 기술이다. 즉 프�
     5. 마이크로서비스 아키텍처를 구성하는것에 대해 효율적이다. 
 2. Docker에는 캡쳐기능이 있다. VM의 스냅샷과 동일하다.
 3. Docker는 컨테이너를 이미지화 시켜 배포를 쉽고 빠르게 할 수 있다. 
+
+## Docker 다운로드(Windows 환경)
+1. 공식 홈페이지에서 Windows docker 설치
+2. WSL 2 installation is incomplete. 오류 발생시 -> 관리자 권한으로 파워쉘 실행후
+    1. dism.exe /online /enable-feature /featurename:Microsoft-Windows-Subsystem-Linux /all /norestart (리눅스 서브시스템 활성)
+    2.  dism.exe /online /enable-feature /featurename:VirtualMachinePlatform /all /norestart(가상 머신 플랫폼 기능 활성)
+    3.  wslstorestorage.blob.core.windows.net/wslblob/wsl_update_x64.msi(WSL 2 설치)
