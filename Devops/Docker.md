@@ -61,7 +61,7 @@ For more examples and ideas, visit:
  https://docs.docker.com/get-started/
 ```
 
-### image
+### image - 프로그램을 실행하는데 필요한 설정이나 종속성
 1. 시작시 실행 될 명령어
 2. 파일 스냅샷
 
