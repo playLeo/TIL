@@ -22,7 +22,7 @@ hello-world 이미지 스냅샷에는 없다.
 # 컨테이너 나열하기
 
 ## docker ps(process status) : 실행중인 컨테이너
-* -a : 모든 컨테이너 나열
+* -a(all) : 모든 컨테이너 나열
 * --format '{{.Names}}\t{{.Image}}' : 원하는 항목만 표시
 
 1. CONTAINER ID - 컨테이너의 고유한 아이디 해쉬값(일부만 표시됨)
@@ -38,4 +38,24 @@ hello-world 이미지 스냅샷에는 없다.
 
 <img src="https://velog.velcdn.com/images%2Frmswjdtn%2Fpost%2Fa84f85ba-1efd-4cc4-807e-e30e46ab9375%2Fimage.png" width="100%" height="80%">
 
+* docker create : 컨테이너에 할당된 하드디스크에 파일 스냅샷을 올린다.
+* docker start : 시작시 실행 될 명령어 실행
+* docker run : create + start
+* -a(attach) : container가 실행될 때 나오는 output을 모두 terminal에 출력
+* docker stop : 실행중인 container를 Gracefully하게 중지시킨다.(진행중인 작업 완료 후 중지)
+* docker kill : 실행중인 container를 바로 중지시킨다.
+* docker rm : 중지된 container를 삭제한다.(모든 컨테이너 삭제 - docker rm `docker ps -a -q`)
+* docker system prune : 컨테이너, 이미지, 네트워크 모두 삭제(실행중인 컨테이너에는 영향을 주지 않는다.)
 
+# 실행중인 컨테이너에 명령어 전달
+
+## docker exec
+
+* docker를 이용해 redis 사용해보기
+1. docker run redis
+2. 새로운 터미널로 docker exec -it 컨테이너이름 redis-cli (-it는 interactive terminal이 합쳐진 옵션이고, redis-cli를 실행하고 터미널을 유지하기 위한 옵션)
+
+* 컨테이너 안의 쉘 환경으로 접속
+docker run -it 이미지이름 sh
+
+* 쉘 터미널 환경에서 나오려면 Ctrl + D
