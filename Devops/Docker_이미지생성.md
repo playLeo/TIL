@@ -14,10 +14,12 @@ Dockerfile은 코드의 형태로 인프라를 구성하는 방법을 텍스트 
 * ENV : 환경 변수 설정
 * ADD : 파일, 디렉토리 추가
 * COPY : 파일 복사
+  * 베이스 이미지 스냅샷은 임시 컨테이너에 올라가지만 추가적인 종속성은 올라가지 않아 COPY를 통해 올려준다.
 * ENTRYPOINT : 컨테이너가 시작되었을 때 스크릅트 실행
 * VOLUME : 볼룸 마운트
 * USER : 명령 실행할 사용자 권한 지정
 * WORKDIR : RUN, CMD, ENTRYPOINT 명령이 실행될 작업 디렉토리
+  * WORKDIR을 설정하지 않고 사용하면 ROOT 디렉토리에 COPY한 파일이 생성되면서 이름이 같은경우 덮어써지는 가능성이 있다. 또한 관리 차원에서 디렉토리를 만들어 관리하면 편하다.
 * ARG : Dockerfile 내부 변수
 * ONBUILD : 다른 이미지의 Base Image로 쓰이는 경우 실행될 명령
 * SHELL : Default Shell 지정
@@ -41,3 +43,5 @@ ___
 
 spring boot docker ec2 배포
 Q. base image에 jdk 올리는데 ec2의 ubuntu 위에 jdk는 왜 설치한는 거지 ?
+
+https://velog.io/@18k7102dy/Docker-Spring-%ED%94%84%EB%A1%9C%EC%A0%9D%ED%8A%B8%EB%A5%BC-Docker%EB%A5%BC-%EC%9D%B4%EC%9A%A9%ED%95%B4%EC%84%9C-%EB%B0%B0%ED%8F%AC%ED%95%B4%EB%B4%85%EC%8B%9C%EB%8B%A4
