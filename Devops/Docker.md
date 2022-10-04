@@ -109,6 +109,48 @@ Container는 Docker API를 사용하여 생성, 시작, 중지, 이동, 삭제 �
 Service를 사용하면, 여러 개의 Docker Daemon들로 이루어진 영역 내에서 Container들의 확장(Scaling)시킬 수 있다. Srvice는 특정 시간동안 사용 가능한 Service의 Replica 개수와 같은 상태 정보들을 직접 정의할 수 있다. 기본적으로 Service는 Docker Daemon들 간의 Load Balancing을 제공하고 있기 때문에, 사용자 관점에서는 단일 Application으로 보인다.
 
 
+## Image와 Layer
+
+Image는 Dockerfile이라는 Build 명세서를 바탕으로 생성된다. 
+
+ubuntu latest버전의 layer를 보자
+
+~latest버전 설치시 버전 몇인지 확인하는 방법을 모르겠다.. ubuntu의 Dockerfile 원본도 보고싶지만 찾지 못했다.~
+
+```
+
+ADD file:a7268f82a86219801950401c224cabbdd83ef510a7c71396b25f70c2639ae4fa in / 
+
+CMD ["bash"]
+
+___
+
+#docker history ubuntu 실행시
+IMAGE          CREATED       CREATED BY                                      SIZE      COMMENT
+2dc39ba059dc   4 weeks ago   /bin/sh -c #(nop)  CMD ["bash"]                 0B
+<missing>      4 weeks ago   /bin/sh -c #(nop) ADD file:a7268f82a86219801…   77.8MB
+
+```
+
+각각의 명령어별로 Layer가 생성되어 있다.
+
+Layer는 수정이 불가능하며, 오로지 읽기만 가능하다. IMAGE열에 missing으로 표현된 Layer는 해당 Layer가 다른 시스템에 의해 작성되었으며, Local에서 사용할 수 없음을 의미한다.
+
+ 
+## Container 와 Image
+오로지 읽기만 가능한 Image Layer의 최상단에 읽기/쓰기가 가능한 얇은 Layer가 추가되어 실행할 수 있는데, 이것이 바로 Container다. Container Layer에는 Container 기동 중 발생하는 모든 변경 사항들(팡리 생성, 수정, 삭제 등)이 작성되고 저장된다.
+
+정리하면 
+ 
+* Image는 Layer의 Set으로 이루어져 있으며, 각각의 Layer는 Dockerfile의 명령어에 해당한다.
+* Image Layer는 읽기전용 Layer로 수정할 수 없다.
+* Container를 기동하면, 읽기/쓰기가 가능한 Container Layer가 Image Layer Set의 최상단에 추가된다.
+* Container기동 중 발생한 모든 행위는 Container Layer에 기록되며, Container가 삭제되면 해당 Container Layer도 삭제된다.(Image Layer는 삭제되지 않는다)
+
+
+ <img src="https://docs.docker.com/storage/storagedriver/images/container-layers.jpg" width="50%" height="50%">
+
+
 
 ## container 기술을 linux container 기술인데 docker와 lxc의 차이점은 무엇이가 ?
 
@@ -136,3 +178,4 @@ Service를 사용하면, 여러 개의 Docker Daemon들로 이루어진 영역 �
 
 https://medium.com/dtevangelist/docker-%EA%B8%B0%EB%B3%B8-3-8-container%EB%8A%94-%EB%AD%98%EA%B9%8C-bf3df8cbaf44
 
+https://docs.docker.com/storage/storagedriver/#sharing-promotes-smaller-images
