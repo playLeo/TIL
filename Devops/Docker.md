@@ -16,7 +16,7 @@
 
 ## 컨테이너란? (LXC)
 
-리눅스의 시스템 기능인 namespace와 cgroup 기반으로 만들어진 격리된 공간이다.
+리눅스의 시스템 기능인 namespace와 cgroup 기반으로 만들어진 운영체제의 커널이 하나의 인스턴스가 아닌, 여러 개의 격리된 인스턴스를 갖출 수 이ㅆ도록 한느 서버 가상화 공간이다.
 
 namespace는 프로세스를 독립시켜주는 가상화 기술이다. 즉 프로세스 ID(PID)가 같아도 서로 다른 프로세스다. - 같은 커널에서 동작하지만 서로 다른공간.
 
@@ -24,8 +24,17 @@ namespace는 프로세스를 독립시켜주는 가상화 기술이다. 즉 프�
 
 격리된 공간(프로세스)를 만들고 나면 cgroup을 사용하여 하드웨어 자원을 분배한다.
 
-## 컨테이너의 격리 환경 및 동작 원리
+## VM vs Container
+
 ![img](https://img1.daumcdn.net/thumb/R1280x0/?scode=mtistory2&fname=https%3A%2F%2Fblog.kakaocdn.net%2Fdn%2FdiOvdN%2Fbtq6AvHVKbt%2FmF2hsL9jsGWIKfekItKbV1%2Fimg.png)
+
+VM은 VPU, 메모리, 디스크는 물론이고 그 안에서 구동중인 운영체제와 각종 라이브러리까지 전체 영역을 독립적으로 구분되어 운영한다. 따라서 각 VM에는 운영체제의 전체 번들, 하나 이상의 응용프로그램, 필요한 바이너리 및 라이브러리 전체가 포함되어 있기 때문에 수십 GB를 차지한다. 반면 Container는 전체 운영 체제를 번들로 제공하지 않고, 소프트웨어가 실행에 필요한 라이브러리 및 설정들만 포함 되기 때문에 일반적으로 Conainer를 생성하는 Image의 크기는 수십 MB정도다.
+
+동작 방식에서도 VM은 Hypervisor가 완전히 실행된 후에 Application이 작동되지만, Conainer는 이미 시스템이 동작되고 있는 상태에서 Application 부분만 가상화되어 실행되기 때문에 속도가 훨씬 빠르다.
+
+
+
+## 컨테이너의 격리 환경 및 동작 원리
 
 
 CLI 입력 -> 도커 클라이언트 -> 도커 서버 (이미지 캐쉬 확인 후 없으면 허브에서 pull) -> 도커 클라이언트 -> CLI terminal
@@ -69,40 +78,37 @@ Docker Client와 Docker Daemon은 REST API를 사용하여 통신하며, Docker 
 
 Docker Client와 Docker Daemon은 동일한 시스템에서 실행될 수도 있고, 원격으로 연결하여 사용할 수도 있다. 
 
-**Docker Daemon**
+* **Docker Daemon**
 
 Docker Daemon은 Client로 부터 API 요청을 수신하고 Image, Container, Network 및 Volume과 같은 Docker Object를 관리한다. Daemon은 Docker 서비스를 관리하기 위해 다른 Daemon과 통신할 수 있다.
 
-**Docker Client**
+* **Docker Client**
 
 Docker Client는 사용자가 Docker Daemon과 통신하는 주요 방법이다. docker 명령여넌 Docker API를 사용하며, Docker Client는 둘 이상의 Docker Daemon과 통신 할  수 있다.
 
-**Docker Registry**
+* **Docker Registry**
 
 Docker Registry는 Docker Image를 저장한다. Docker Hub는 누구나 사용할 수 있는 Public Registry이며, Docker는 기본적으로 Docker Hub에서 Image를 찾아서 Container를 구성하도록 되어 있다. 개개인이 구성하는 Registry도 만들 수 있다.
 
-**Docker Object**
+* **Docker Object**
 
 Docker Object는 Docker Daemon에 의해 생성 및 관리되는 Image, Container, Network, Volume 등의 개체를 말한다.
 
-**Image**
+* **Image**
 
-Image는 Docker Container를 생성하기 위한 일기 전용 Template이다. Image들은 다른 Image 기반 위에 Customizing이 추가되어 만들어질 수 있으며, Dockerfile에 Image를 만들고 실행하는 데 필요한 단계를 명령어로 정의하여 생성한다. Docekrfile에 정의된 각각의 명령어들은 Image Layer를 생성하며, Layer들이 모여 Image를 구성한다. Dockerfile을 변경하고 Image를 다시 구성하면 변경된 부분만 새로운 Layer가 생성된다. 이러한 Layer 구조는 Docker가 타 가상화 방식과 비교할 때, 매우 가볍고 빠르게 기동할 수 있는 요인이 된다.
+Image는 Docker Container를 생성하기 위한 일기 전용 Template이다. Image들은 다른 Image 기반 위에 Customizing이 추가되어 만들어질 수 있으며, Dockerfile에 Image를 만들고 실행하는 데 필요한 단계를 명령어로 정의하여 생성한다. Docekrfile에 정의된 각각의 명령어들은 Image Layer를 생성하며, Layer들이 모여 Image를 구성한다. Dockerfile을 변경하고 Image를 다시 구성하면 변경된 부분만 새로운 Layer가 생성된다. 이러한 Layer 구조는 Docker가 타 가상화 방식과 비교할 때, 매우 가볍고 빠르게 기동할 수 있는 요인이 된다. 간단하게 시작시 실행될 명령어와 파일 스냅삿이 있다고 생각하자.
 
-**Container**
+이미지를 통해 컨테이너를 만들면 파일 스냅샷을 기반으로 필요한 프로그램을 cgroup으로 할당 된 하드부분에 설치 후 시작 명령어 실행
+
+* **Container**
 
 Container는 Docker API를 사용하여 생성, 시작, 중지, 이동, 삭제 할 수 있는 Image의 실행가능한 Instance를 나타낸다. Container를 하나 이상의 Network에 연결하거나, 저장 장치로 묶을 수 있으며, 현재 상태를 바탕으로 새로운 Image를 생성할 수도 있다. 기본적으로 Container는 Host 또는 다른 Container로부터 격리되어 있으며, Network/Storage와 다른 하위 시스템에 대한 접근을 직접 제어할 수 있다. Container가 제거될 때는 영구 저장소에 저장되지 않은 변경사항은 모두 해당 Container와 같이 사라진다.
 
-**Service**
+* **Service**
 
 Service를 사용하면, 여러 개의 Docker Daemon들로 이루어진 영역 내에서 Container들의 확장(Scaling)시킬 수 있다. Srvice는 특정 시간동안 사용 가능한 Service의 Replica 개수와 같은 상태 정보들을 직접 정의할 수 있다. 기본적으로 Service는 Docker Daemon들 간의 Load Balancing을 제공하고 있기 때문에, 사용자 관점에서는 단일 Application으로 보인다.
 
 
-### image - 프로그램을 실행하는데 필요한 설정이나 종속성
-1. 시작시 실행 될 명령어
-2. 파일 스냅샷
-
-이미지를 통해 컨테이너를 만들면 파일 스냅샷을 기반으로 필요한 프로그램을 cgroup으로 할당 된 하드부분에 설치 후 시작 명령어 실행
 
 ## container 기술을 linux container 기술인데 docker와 lxc의 차이점은 무엇이가 ?
 
@@ -123,3 +129,10 @@ Service를 사용하면, 여러 개의 Docker Daemon들로 이루어진 영역 �
     1. dism.exe /online /enable-feature /featurename:Microsoft-Windows-Subsystem-Linux /all /norestart (리눅스 서브시스템 활성)
     2.  dism.exe /online /enable-feature /featurename:VirtualMachinePlatform /all /norestart(가상 머신 플랫폼 기능 활성)
     3.  wslstorestorage.blob.core.windows.net/wslblob/wsl_update_x64.msi(WSL 2 설치)
+
+
+
+참조
+
+https://medium.com/dtevangelist/docker-%EA%B8%B0%EB%B3%B8-3-8-container%EB%8A%94-%EB%AD%98%EA%B9%8C-bf3df8cbaf44
+
