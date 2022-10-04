@@ -31,7 +31,7 @@ Dockerfile은 코드의 형태로 인프라를 구성하는 방법을 텍스트 
 
 그중 베이스 이미지는 이미지의 기반이 되는 부분(OS라 생각하면 된다)
 
-## docker build./
+## docker build ./ or docker build .
 
 도커 파일에 입력된 것들이 도커 클라이언트에 전달되어 도커 서버가 인식할 수 있도록 build 해준다.
 
