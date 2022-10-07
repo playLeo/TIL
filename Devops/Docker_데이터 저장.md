@@ -1,12 +1,26 @@
-Docker 컨테이너에 쓰여진 데이터는 기본적으로 컨테이너가 삭제될 때 함께 사라지게 된다. Docker에서 돌아가느 많은 애플리케이션이 컨테이너의 생명 주기와 관계없이
+Docker 컨테이너에 쓰여진 데이터는 기본적으로 컨테이너가 삭제될 때 함께 사라지게 된다. Docker에서 돌아가는 많은 애플리케이션이 컨테이너의 생명 주기와 관계없이
 데이터를 영속적으로 저장해야하고, 여러 개의 Docker 컨테이너가 하나의 저장 공간을 공유해서 데이터를 읽고 써야 한다.
 
-이렇게 Docker 컨테이너의 생명 주기와 관계없이 데이터를 영속적으로 저장할 수 있도록 Docker는 두가지 옵션을 제공한다.
+이렇게 Docker 컨테이너의 생명 주기와 관계없이 데이터를 영속적으로 저장할 수 있도록 Docker는 세가지 옵션을 제공한다.
 
 1. Docker Volume(권장)
 2. Bind Mount
+3. tmpfs
 
 <img src="https://docs.docker.com/storage/images/types-of-mounts.png" width="60%" height="50%">
+
+**Volume**
+
+* Volume은 Docker가 관리하는 Host File System의 일부에 Data가 저장된다.
+* Non-Docker 프로세스들이 File System의 해당 부분을 수정해서는 안된다.
+
+**Bind Mount**
+* Bind Mount는 Host System의 어디든지 Data가 저장될수 있다.
+* 저장되는 Data는 System File이거나 Directory일 수 있다.
+* Docker Host 또는 Docker Container의 Non-Docker 프로세서들이 언제든지 저장된 Data를 수정할 수 있다.
+
+**tmpfs**
+* tmpfs moun는 Host System의 Memory에만 Data가 저장되며, 절대로 Host의 File System에 저장되지 않는다.
 
 ## 볼륨 생성 및 조회
 
