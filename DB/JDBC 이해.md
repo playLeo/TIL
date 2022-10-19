@@ -19,3 +19,135 @@ jdbc를 편하게 사용할 수 있는 기술은 크게 2가지
 1. SQL Mapper - JDBC Template, Mybatis - SQL 응답 결과를 객체로 편리하게 반환한다 + JDBC의 반복 코드르 제거한다 BUT 개발자가 SQL을 직접 작성해야한다.
 2. ORM - 객체와 DB를 매핑해준다.
 
+Connection connection = DriverManager.getConnection(url, username, passward);
+
+라이브러리에 DB가 들어가 있다면 라이브러리에서 DriverManager가 조회해서 connection을 연결 할  수있다.
+
+방금 jdbc 테스트를 진행했는데 @Test를 진행하면 실제 db에 저장 안하는거 아니였나 ?
+h2를 확인해보니 실제 쿼리가 동작해서 데이터가 쌓여 있었다.
+
+```java
+package hello.jdbc.repository;
+import hello.jdbc.connection.DBConnectionUtil;
+import hello.jdbc.domain.Member;
+import lombok.extern.slf4j.Slf4j;
+import java.sql.*;
+/**
+ * JDBC - DriverManager 사용
+ */
+@Slf4j
+public class MemberRepositoryV0 {
+    public Member save(Member member) throws SQLException {
+        String sql = "insert into member(member_id, money) values(?, ?)";
+        Connection con = null;
+        PreparedStatement pstmt = null;
+        //null은 왜 깔고 가는거지?
+        try {
+            con = getConnection();
+            pstmt = con.prepareStatement(sql);
+            pstmt.setString(1, member.getMemberId());
+            pstmt.setInt(2, member.getMoney());
+            //여기 까지 바인딩 작업, 쿼리를 날리지 않은 상태
+            pstmt.executeUpdate();
+            return member;
+        } catch (SQLException e) {
+            log.error("db error", e);
+            throw e;
+        } finally {
+            close(con, pstmt, null);
+        }
+    }
+    private void close(Connection con, Statement stmt, ResultSet rs) {
+        if (rs != null) {
+            try {
+                rs.close();
+            } catch (SQLException e) {
+                log.info("error", e);
+            }
+        }
+        if (stmt != null) {
+            try {
+                stmt.close();
+            } catch (SQLException e) {
+                log.info("error", e);
+            }
+        }
+        if (con != null) {
+            try {
+                con.close();
+            } catch (SQLException e) {
+                log.info("error", e);
+            }
+        }
+    }
+    private Connection getConnection() {
+        return DBConnectionUtil.getConnection();
+    }}
+```
+
+요청마다 db 드라이버를 통해 새로운 커넥션을 얻으면 커넥션마다 db와 tcp/IP 통신을 하고 데이터를 받는 과정이 오래걸린다.
+미리 커넥션 풀에 tcp/IP 통신을 하고 있는 커넥션들을 저장해놓고 요청이 오면 커넥션을 건내주는 방식을 취한다.
+보통 커넥션풀의 커넥션은 10개정도를 유지한다.
+
+커넥션 풀에서 커넥션을 사용후 반납하면 연결을 종료하는 것이 아니라 살아 있느 상태로 반환 해야한다.
+
+커넥션풀의 이점이 상당해서 실무에서는 기본으로 사용한다. 이점은 무한대로 커넥션이 연결되는걸 방지해주는 이점이 있다.
+hikariCP이 춘추 전국시대에서 승리해서 이 커넥션풀을 사용하면 된다.
+boot를 사용하면 기본적으로 적용되어 있다.
+
+JDBC 쓰다가 hikariCP
+DBCP2 쓰다가 hikarCP 이런식으로
+커넥션풀을 안쓰다가 쓰는경우, 쓰다가 변경하는경우 커넥션을 얻는 코드가 다르기 때문에 수정이 필요하다
+이를 해결하기 위해 DataSource 인터페이스로 추상화 해놨다.
+
+DriverManaver는 커넥션풀을 사용하지않고 요청시 커넥션을 받는 형식이다.
+
+## Datasource를 사용해보자.
+
+DriverManager 만 사용해서 connection을 가져오면 
+DriverManager.getConnection(url, username, password); 커넥션을 가져올 때 마다 db 정보를 같이 넘겨줘야 했다.
+
+datasource를 사용해서 커넥션을 얻으면
+DriverManagerDataSource dataSource = new DriverManagerDataSource(url, username, password);에서 db 정보를 넘겨주고
+사용시 dataSource.getConnection()을 사용해 설정과 사용을 분리해 많은 장점을 가져와준다.
+
+
+위 까지는 datasource 추상화를 사용했지만 connection 을 직접 얻어오는 drivermanager를 사용했고  이번엔 
+이번엔 커넥션풀을 사용한느 datasource를 사용해 보자.
+
+커넥션과 세션 -> 커넥션마다 세션이 실행되고 커넥션이 종료 될 때 까지 세션은 살아있다.
+
+세션은 트랜잭션을 시작하고 커밋, 롤백등을 수행하고 종료한다. 종료 후 다른 트랙잭션을 시작할 수 있다.
+
+## 트랜잭션 ACID
+원자성 - 하나의 트랙잭션은 모두 실행 되거나 모두 실행되지 않거나
+일관성 - 모든 트랜잭션은 일관성있는 데이터베이스 상태를 유지해야한다.(무결성 조건)
+격리성 - 동시에 실행되는 트랜잭션은 서로에게 영향을 미치면 안된다.
+지속성 - 트랜잭션이 성공적으로 끝나면 항상 기록되어야 한다. 중간에 문제가 발생해도 로그를 이용해 복구할 수 있어야 한다.
+
+우리가 사용하고 있는 쿼리는 설정은 오토 커밋을 사용하고 있기 때문에 쿼리를 날리면 바로 DB에 반영이된다. 
+
+설정에서 오토커밋을 수동커밋으로 돌리고 db를 확인해보면 커밋하기 전 데이터를 데이터를 추가한 세션에서는 확인이 가능하지만 다른 세션에서는 
+확인할 수 없다.
+
+만약 커밋전 임시로 올라간 데이터가 다른 세션에도 저장되어있다면 다른 세션에서 조회했을때 임시로 저장한 값인지 정식 커밋된 값인지 알 방법이 없다.
+
+자동 커밋이 되어있다면 트랜잭션을 사용할 수 없다.
+수동커밋으로 돌려주고 트랜잭션 기능을 사용해야 한다. -> 트랜잭션을 시작한다고 볼 수 있다.
+
+set autocommit false 
+이후 쿼리를 날리고 커밋 or 롤백 명령어를 항상 넣어줘야 한다. 안하면 타임아웃이 설정되어 있어 자동 롤백됨.
+
+DB에서 직접 쿼리를 날리면서 오토커밋 수동커밋하는건 쉬웠다. 콘솔 열면 콘솔 하나가 하나의 세션을 갖는듯 하다.
+개발자의 실수로 트랜잭션의 일부만 db에 임시 저장되었다면 롤백을 통해 원래의 상태로 되돌아가면되는데 일부만 성공했음을 어떻게 알까 ?
+
+
+## DB락
+
+세션1 이 커밋을 하지 않은 상태에서 데이터를 넣었는데 세션2도 같은 데이터를 넣었다면 원자성이 깨지는 문제와 기타등등의 문제가 발생한다.
+
+세션이 트랜잭션을 시작하고 데이터를 수정하는 동안에는 커밋이나 롤백 전까지 다른 세션에서 해당 데이터를 수정할 수 없게 막아야한다.
+
+세션은 트랜잭션을 수행하기전에 해당 데이터에 대한 락을 획득하고 트랜잭션을 수행한다.
+
+
