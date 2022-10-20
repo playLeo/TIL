@@ -151,3 +151,43 @@ DB에서 직접 쿼리를 날리면서 오토커밋 수동커밋하는건 쉬웠
 세션은 트랜잭션을 수행하기전에 해당 데이터에 대한 락을 획득하고 트랜잭션을 수행한다.
 
 
+____
+
+## 중간정리
+
+초기 JDBC를 이용해 데이터 베이스를 조작하려면 
+connection을 DriverManager를 통해 TCP/IP 통신을 하며 그때 끄때 연결해서 사용했다.
+
+이러한 방식은 커넥션의 수를 조절할 수 없고, TCP/IP 통신을 하며 시간도 오래걸렸다. 그래서 커넥션을 미리 만들어두고
+쓰고 반납하는 형태의 커넥션 풀이 등장했다.
+
+인터페이스인 DataSource를 사용해서 커넥션을 얻는다.
+
+Repo에서는 DataSource를 DI 받아 사용하는 형식으로 사용한다. 물론 스프링이 관리해주는 빈처럼 만들어져 있지 않기 때문에
+Repo를 사용할때 DataSource를 만들고 파라미터로 넘겨준다.
+
+```java
+//Test를 하기위해 Repo를 만들고, Repo를 만들때 DataSource를 만들고 매개변수로 넣어준다.
+HikariDataSource dataSource = new HikariDataSource();
+        dataSource.setJdbcUrl(URL);
+        dataSource.setUsername(USERNAME);
+        dataSource.setPoolName(PASSWORD);
+
+        memberRepository = new MemberRepositoryV1(dataSource);
+```
+위의 코드는 일일이 커넥션을 연결하는 JDBC의 getConnection이 아닌 Hikari를 사용해 커넥션풀을 사용하고 DataSource인터페이스를
+상속받은 HikariDataSource를 이용했다.
+
+실제 코드레벨에서 트랜잭션을 구현하기 위해서는 repo에서 커넥션을 반환하면 안되고 비지니스 로직을 실현하는 service에서 트랜잭션을
+수행하고 종료하는 작업을 수행 해야한다.
+
+service에서도 Datasource를 주입받고 사용하게 설계하고 Datasource.get을 통해 한 커넥션을 가져와 트랜잭션을 실행할 메서드에 
+매개변수로 넣어줘 같은 커넥션과 세션을 사용하게 만들어 트랜잭션을 수행 할 수 있다.
+모든 비지니스 로직을 수행후 con.rollback(), con,commit() 등의 마무리 작업을 수행하고 
+비지니스 로직전 con.setAutuCommit(flase)를 해주고 커밋 롤백후에도 오토커밋모드로 변경해놔야 안전한다.
+
+비지니스 로직에 이러한 트랜잭션 코드와 매개변수로 커넥션을 넘겨주는 것은 코드가 지저분해지는 것과 커넥션을 받는 메서드 
+안받는 메서드 등등을 따로 만들려면 상당히 피곤한 작업을 진행해야한다. 
+
+우리는 스프링이 제공해주는 트랙잭션을 사용해서 이러한 문제들을 해결해 보려한다.
+
