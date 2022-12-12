@@ -101,7 +101,7 @@ java 8 버전 이전에는 heap이 아닌 영구 영역에서 static object를 �
 
 MetaSpaece는 OS에 따라 자동으로 크기를 늘리는 차이가 있다.
 
-<img src="https://img1.daumcdn.net/thumb/R1280x0/?scode=mtistory2&fname=https%3A%2F%2Fblog.kakaocdn.net%2Fdn%2Fb0U7RP%2Fbtq5Vxscf3t%2FbZfYBeNXiks8sKcs15v931%2Fimg.png" width="60%" height="50%">
+<img src="https://img1.daumcdn.net/thumb/R1280x0/?scode=mtistory2&fname=https%3A%2F%2Fblog.kakaocdn.net%2Fdn%2FmcNoh%2Fbtq5Szc2Ibz%2F1TqW4CvtQzxGWI8nQsdbJK%2Fimg.png" width="60%" height="50%">
 <img src="https://img1.daumcdn.net/thumb/R1280x0/?scode=mtistory2&fname=https%3A%2F%2Fblog.kakaocdn.net%2Fdn%2Fb0U7RP%2Fbtq5Vxscf3t%2FbZfYBeNXiks8sKcs15v931%2Fimg.png" width="60%" height="50%">
 
 
