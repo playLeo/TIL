@@ -77,3 +77,43 @@ GC가 되지 않는 루트 참조 객체는 크게 3가지다.
  * https://velog.io/@recordsbeat/Garbage-Collector-%EC%A0%9C%EB%8C%80%EB%A1%9C-%EC%95%8C%EA%B8%B0
  * https://mangkyu.tistory.com/118
  * https://coding-factory.tistory.com/828
+
+---
+추가
+
+static 은 런타임시 메소드 영역에 저장된다고 알고 있었다. 멀티스레드를 공부 하던중 heap에 할당되는 항목에 static variables가 있어 혼란스러워서 찾아봤다.
+
+<img src="https://velog.velcdn.com/images%2Frecordsbeat%2Fpost%2F682408fc-f29e-42e9-b980-3d6f1d6c4989%2Fimage.png" width="60%" height="50%">
+
+지금까지 메소드 영역과 영구영역은 각각 다른게 존재하고, Java 8 이후 부터는 PermGen은 제거되었다고 알고 있었다.(MetaSapce로 대체)
+
+일단, 메서드 영역과 영구 영역의 관계를 살펴보자.
+
+메서드 영역은 영구 영역의 일부이며 클래스 구조와 메서드 및 생성자의 코드를 저장하는 데 사용된다.
+
+메서드 영역과 영구 영역은 서로 다른 관계가 아니라는 것이다.
+
+java 8 버전 이전에는 heap이 아닌 영구 영역에서 static object를 관리했다.
+
+영구 영역은 제한적 크기를 갖기 때문에 가장 큰 단점인 OOM error가 발생한다. 이로인해 JVM은 비용이 많이 드는 GC를 자주 수행해야 했다. 영구 영역의 크기를 조정할 수 있지만 어렵고, 자동으로 조정 가능하게 할 수 없다.
+
+이러한 문제로 영구 영역은 Java 8 에서 완전히 제거되고 MetaSpace라는 새로운 기능을 도입했다.
+
+MetaSpaece는 OS에 따라 자동으로 크기를 늘리는 차이가 있다.
+
+<img src="https://img1.daumcdn.net/thumb/R1280x0/?scode=mtistory2&fname=https%3A%2F%2Fblog.kakaocdn.net%2Fdn%2Fb0U7RP%2Fbtq5Vxscf3t%2FbZfYBeNXiks8sKcs15v931%2Fimg.png" width="60%" height="50%">
+<img src="https://img1.daumcdn.net/thumb/R1280x0/?scode=mtistory2&fname=https%3A%2F%2Fblog.kakaocdn.net%2Fdn%2Fb0U7RP%2Fbtq5Vxscf3t%2FbZfYBeNXiks8sKcs15v931%2Fimg.png" width="60%" height="50%">
+
+
+[https://openjdk.java.net/jeps/122](https://openjdk.java.net/jeps/122)
+
+내용을 해석해보자면, hotspot jvm에서 permanent영역은 제거되고 permenent에서 관리하던 class metadata, interned String, class static variable은 heap영역이나 native memory영역으로 옮겨졌다. 더 정확한 표현으로 class meta-data는 native memory로 interned String과 class static은 heap영역으로 할당된다.
+
+따라서 자바 8부터는 static variables는 heap에 할당되는게 맞다.
+
+또한 heap에 저장되기 때문에 참조되지 않는 static 레퍼런스인 경우에도 GC의 대상이 된다.
+
+**참조**
+
+* [https://jgrammer.tistory.com/144](https://jgrammer.tistory.com/144)
+* [https://www.geeksforgeeks.org/metaspace-in-java-8-with-examples/](https://www.geeksforgeeks.org/metaspace-in-java-8-with-examples/)
